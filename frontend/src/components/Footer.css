@@ -1,0 +1,61 @@
+/* src/Footer.css */
+footer {
+  background-color: #2C2C2C;
+  color: #fff;
+  width: 100%; /* Garante que o footer ocupe 100% da largura */
+  padding: 20px 0;
+  position: relative; /* Permite que o footer fique no final da página */
+  left: 0; /* Alinha à esquerda */
+  right: 0; /* Alinha à direita */
+  margin: 0; /* Remove margens */
+  box-sizing: border-box; /* Inclui padding e borda na largura total */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%; /* Mantém o conteúdo centralizado */
+  margin: 0 auto; /* Centraliza o conteúdo do footer */
+}
+
+.footer-content div {
+  flex: 1;
+  margin: 10px;
+}
+
+.footer-content h3 {
+  margin-top: 0;
+}
+
+.footer-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-content ul li {
+  margin: 5px 0;
+}
+
+.footer-content ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s; /* Efeito ao passar o mouse */
+}
+
+.footer-content ul li a:hover {
+  color: #3D78FF; /* Cor ao passar o mouse */
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px; /* Ajusta a fonte da seção inferior */
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,95 @@
+/* src/Home.css */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.hero-text {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.card {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  flex: 1 1 calc(33.333% - 40px); /* Três cartões por linha com espaçamento */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content {
+  display: flex;
+  flex: 1;
+}
+
+.card-text {
+  flex: 1;
+  padding: 20px;
+}
+
+.card-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card a {
+  display: block;
+  padding: 20px;
+  background-color: #2C2C2C;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+}
+
+.card a:hover {
+  background-color: #444;
+}
+
+.reserve-button {
+  background-color: #2C2C2C;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.reserve-button:hover {
+  background-color: #444;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text {
+    margin-right: 0;
+  }
+
+  .cards {
+    flex-direction: column;
+  }
+
+  .card {
+    flex: 1 1 100%; /* Um cartão por linha em telas muito pequenas */
+    margin: 20px 0;
+  }
+}

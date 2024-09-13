@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import BookingForm from './components/BookingForm';
-import BookingList from './components/BookingList';
+import React from 'react'
+import './App.css'
+import NavBar from './components/NavBar'
+import Home from './components/Home'
+import Footer from './components/Footer' // Importar o Footer
 
 function App() {
-  const [bookings, setBookings] = useState([]);
-
-  useEffect(() => {
-    fetch('http://localhost:3001/api/bookings')
-      .then(response => response.json())
-      .then(data => setBookings(data));
-  }, []);
-
-  const addBooking = (booking) => {
-    fetch('http://localhost:3001/api/bookings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(booking),
-    })
-    .then(response => response.json())
-    .then(newBooking => {
-      setBookings([...bookings, newBooking]);
-    });
-  };
-
   return (
     <div className="App">
-      <h1>Agendamento da Arena</h1>
-      <BookingForm addBooking={addBooking} />
-      <BookingList bookings={bookings} />
+      <NavBar />
+      <main>
+        <Home />
+        {/* Outros componentes ou conteúdo da página */}
+      </main>
+      <Footer /> {/* Adicionar o Footer aqui apenas uma vez */}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

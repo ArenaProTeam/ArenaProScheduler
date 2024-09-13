@@ -1,5 +1,98 @@
+/* src/App.css */
+
 .App {
   text-align: center;
+}
+
+.App main {
+  max-width: 80%; /* Define a largura máxima de 80% */
+  margin: 0 auto; /* Centraliza o conteúdo */
+  padding: 20px; /* Padding interno */
+}
+
+body {
+  padding-top: 50px; /* O mesmo valor da altura do NavBar */
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.hero-text {
+  flex: 1;
+  padding: 20px;
+}
+
+.hero-image {
+  flex: 1;
+  padding: 20px;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Ajustado para dar mais espaço */
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  flex: 1 1 calc(33.333% - 40px); /* Três cartões por linha com espaçamento */
+  box-sizing: border-box;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+  }
+
+  .hero-text, .hero-image {
+    padding: 10px;
+  }
+
+  .cards {
+    padding: 10px; /* Menor padding em telas menores */
+  }
+
+  .card {
+    flex: 1 1 calc(50% - 20px); /* Dois cartões por linha em telas menores */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    flex-direction: column;
+  }
+
+  .hero-text, .hero-image {
+    padding: 5px;
+  }
+
+  .cards {
+    padding: 5px; /* Menor padding em telas muito pequenas */
+  }
+
+  .card {
+    flex: 1 1 100%; /* Um cartão por linha em telas muito pequenas */
+  }
+
+  .App main {
+    max-width: 100%; /* Ajuste para telas muito pequenas */
+  }
 }
 
 .App-logo {
