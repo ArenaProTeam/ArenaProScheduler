@@ -12,9 +12,16 @@ Plataforma para agendamento de quadras de areia.
 ```plaintext
 beach-arena-scheduler/
 ├── backend/
-│   ├── server.js
-│   └── routes/
-│       └── bookings.js
+│   ├── config/
+│       └── db.js
+│   ├── controllers/
+│       └── arenaController.js
+│   ├── models/
+│       └── Arena.js
+│   ├── routes/
+│       └── arenaRoutes.js
+│   ├── .env
+│   └── server.js
 ├── frontend/
 │   ├── public/
 │   │   ├── index.html
