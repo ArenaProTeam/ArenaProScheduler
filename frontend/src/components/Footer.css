@@ -2,13 +2,10 @@
 footer {
   background-color: #2C2C2C;
   color: #fff;
-  width: 100%; /* Garante que o footer ocupe 100% da largura */
-  padding: 20px 0;
-  position: relative; /* Permite que o footer fique no final da página */
-  left: 0; /* Alinha à esquerda */
-  right: 0; /* Alinha à direita */
-  margin: 0; /* Remove margens */
-  box-sizing: border-box; /* Inclui padding e borda na largura total */
+  width: 100%;
+  padding: 20px;
+  margin-top: 50px; /* Faz o footer ficar na parte inferior */
+  box-sizing: border-box;
 }
 
 .footer-content {

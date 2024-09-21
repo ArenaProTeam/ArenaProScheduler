@@ -1,19 +1,32 @@
+// src/App.js
 import React from 'react'
-import './App.css'
-import NavBar from './components/NavBar'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom' // Usando Routes em vez de Switch
+import Header from './components/Header'
 import Home from './components/Home'
-import Footer from './components/Footer' // Importar o Footer
+import About from './components/About'
+import Structure from './components/Structure'
+import Contact from './components/Contact'
+import Reserve from './components/Reserve'
+import Footer from './components/Footer'
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <NavBar />
-      <main>
-        <Home />
-        {/* Outros componentes ou conteúdo da página */}
-      </main>
-      <Footer /> {/* Adicionar o Footer aqui apenas uma vez */}
-    </div>
+    <Router>
+      <Header />
+      <div className="content-container">
+        <main>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/quem-somos" element={<About />} />
+            <Route path="/estrutura" element={<Structure />} />
+            <Route path="/contato" element={<Contact />} />
+            <Route path="/reserva-online" element={<Reserve />} />
+            <Route path="/" element={<Home />} /> {/* Rota padrão */}
+          </Routes>
+        </main>
+      </div>
+      <Footer />
+    </Router>
   )
 }
 

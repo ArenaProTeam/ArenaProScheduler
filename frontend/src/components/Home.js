@@ -1,6 +1,6 @@
+// src/components/Home.js
 import React from 'react'
 import './Home.css'
-import Footer from './Footer'
 
 const Home = () => (
   <div id="root">
@@ -9,17 +9,22 @@ const Home = () => (
         <div className="hero">
           <div className="hero-text">
             <h1>VIVA ESSA EXPERIÊNCIA</h1>
+            <br></br>
+            <br></br>
             <p>
               Traga seus amigos e bora pro PLAY! Para aulas de beach tennis e
               beach volley, entre em contato pelo nosso WhatsApp: (11)
               92114-8000
             </p>
+            <br></br>
+
             <button className="reserve-button">RESERVA ONLINE</button>
           </div>
           <div className="hero-image">
             <img src="%PUBLIC_URL%/hero-image.jpg" alt="Beach tennis" />
           </div>
         </div>
+
         <div className="cards">
           <div className="card">
             <h2>QUEM SOMOS</h2>
@@ -38,12 +43,13 @@ const Home = () => (
             </div>
             <a href="#quem-somos">Ver Página →</a>
           </div>
+
           <div className="card">
             <h2>ESTRUTURA</h2>
             <div className="card-content">
               <div className="card-text">
                 <p>
-                  A ARENA PRO possui uma área de mais de 2.000m2 de estrutura,
+                  A ARENA PRO possui uma área de mais de 2.000m² de estrutura,
                   composta por 6 quadras, vestiários masculino e feminino,
                   bar/restô adaptado para cadeirantes e estacionamento
                   privativo. Uma estrutura completa esperando por você!
@@ -55,6 +61,7 @@ const Home = () => (
             </div>
             <a href="#estrutura">Ver Página →</a>
           </div>
+
           <div className="card">
             <h2>NOSSO INSTAGRAM</h2>
             <div className="card-content">
@@ -71,6 +78,7 @@ const Home = () => (
             </div>
             <a href="#instagram">Ver Página →</a>
           </div>
+
           <div className="card">
             <h2>CONTATO</h2>
             <div className="card-content">

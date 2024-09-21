@@ -1,0 +1,31 @@
+.about-container {
+  padding: 20px;
+  max-width: 80%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.about-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-container p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.reserve-button {
+  display: block;
+  margin: 20px auto;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.reserve-button:hover {
+  background-color: #0056b3;
+}

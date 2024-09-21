@@ -1,19 +1,28 @@
 /* src/App.css */
 
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Faz o container ocupar a altura total da tela */
 }
 
-.App main {
-  max-width: 80%; /* Define a largura máxima de 80% */
+main {
+  flex: 1; /* Faz o main ocupar o espaço restante */
+  padding: 20px; /* Padding geral */
+  padding-top: 100px; /* Altura do header */
+  margin-bottom: 0; /* Altura do footer */
+  width: 80%; /* Mantém a largura do conteúdo */
   margin: 0 auto; /* Centraliza o conteúdo */
-  padding: 20px; /* Padding interno */
-}
+} 
 
 body {
-  padding-top: 50px; /* O mesmo valor da altura do NavBar */
-  font-family: Arial, sans-serif;
   margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Remover padding-top duplicado */
+.App main {
+  width: 80%; /* Ajuste para que o main tenha sempre 80% de largura */
 }
 
 .hero {
@@ -91,7 +100,7 @@ body {
   }
 
   .App main {
-    max-width: 100%; /* Ajuste para telas muito pequenas */
+    width: 100%; /* Ajuste para telas muito pequenas */
   }
 }
 

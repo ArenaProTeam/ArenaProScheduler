@@ -1,8 +1,9 @@
-// src/components/NavBar.js
+// src/components/Header.js
 import React from 'react'
-import './NavBar.css'
+import { Link } from 'react-router-dom' // Importando o Link do react-router-dom
+import './Header.css'
 
-const NavBar = () => {
+const Header = () => {
   return (
     <header>
       <nav>
@@ -12,19 +13,19 @@ const NavBar = () => {
           </div>
           <ul className="menu">
             <li>
-              <a href="#home">Home</a>
+              <Link to="/home">Home</Link>
             </li>
             <li>
-              <a href="#quem-somos">Quem Somos</a>
+              <Link to="/quem-somos">Quem Somos</Link>
             </li>
             <li>
-              <a href="#estrutura">Estrutura</a>
+              <Link to="/estrutura">Estrutura</Link>
             </li>
             <li>
-              <a href="#contato">Contato</a>
+              <Link to="/contato">Contato</Link>
             </li>
             <li>
-              <a href="#reserva-online">Reserva Online</a>
+              <Link to="/reserva-online">Reserva Online</Link>
             </li>
           </ul>
         </div>
@@ -33,4 +34,4 @@ const NavBar = () => {
   )
 }
 
-export default NavBar
+export default Header

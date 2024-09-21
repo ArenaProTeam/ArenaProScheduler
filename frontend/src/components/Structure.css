@@ -1,0 +1,35 @@
+/* src/components/Structure.css */
+
+.structure-container {
+  padding: 20px;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 80%;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: limegreen; /* Cor do título */
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsividade */
+  gap: 20px; /* Espaçamento entre os itens */
+}
+
+.grid-item {
+  background-color: #f0f0f0; /* Cor de fundo opcional */
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px; /* Altura fixa para os placeholders */
+}
+
+.image-placeholder {
+  color: #555; /* Cor do texto do placeholder */
+  font-size: 1.2rem;
+}
