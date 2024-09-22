@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ArenaProScheduler/static/css/main.1b51258b.css",
-    "main.js": "/ArenaProScheduler/static/js/main.8bfa1aaa.js",
+    "main.js": "/ArenaProScheduler/static/js/main.6c1d2349.js",
     "index.html": "/ArenaProScheduler/index.html",
     "main.1b51258b.css.map": "/ArenaProScheduler/static/css/main.1b51258b.css.map",
-    "main.8bfa1aaa.js.map": "/ArenaProScheduler/static/js/main.8bfa1aaa.js.map"
+    "main.6c1d2349.js.map": "/ArenaProScheduler/static/js/main.6c1d2349.js.map"
   },
   "entrypoints": [
     "static/css/main.1b51258b.css",
-    "static/js/main.8bfa1aaa.js"
+    "static/js/main.6c1d2349.js"
   ]
 }
