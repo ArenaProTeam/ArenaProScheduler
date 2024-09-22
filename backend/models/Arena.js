@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
 const arenaSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  location: { type: String, required: true },
-  schedule: [{ date: Date, booked: Boolean }]
+    nome: { type: String, required: true },
+    quantidadeDePessoa: { type: Number, required: true },
+    telefone: { type: String, required: true }
 });
 
-module.exports = mongoose.model('Arena', arenaSchema);
+const Arena = mongoose.model('Arena', arenaSchema);
+
+module.exports = Arena;
