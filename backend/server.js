@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000; // Alterado para 3000 conforme seu código
 
 app.use(cors());
 app.use(express.json());
@@ -19,8 +19,9 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Importar rotas
 const arenaRoutes = require('./routes/arenaRoutes');
-app.use('/api/arenas', arenaRoutes);
+app.use('/api/arenas', arenaRoutes); // Usar rotas da arena
 
+// Iniciar o servidor
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
