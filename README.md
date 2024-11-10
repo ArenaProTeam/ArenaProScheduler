@@ -24,12 +24,16 @@ beach-arena-scheduler/
 │   └── server.js
 ├── frontend/
 │   ├── public/
-│   │   ├── index.html
+│   │   └── index.html
 │   └── src/
 │       ├── components/
-│       │   ├── BookingForm.js
-│       │   ├── BookingList.js
+│       │   ├── About.js
+│       │   ├── Home.js
+│       │   ├── Contact.js
+│       │   ├── Structure.js
+│       │   ├── Reserve.js
+│       │   └── ReservationModal.js
 │       ├── App.js
-│       ├── index.js
+│       └── index.js
 ├── package.json
 └── README.md
