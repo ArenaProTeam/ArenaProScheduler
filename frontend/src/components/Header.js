@@ -2,6 +2,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom' // Importando o Link do react-router-dom
 import './Header.css'
+import logoImg from '../assets/logo-arenapro.png'
 
 const Header = () => {
   return (
@@ -9,7 +10,7 @@ const Header = () => {
       <nav>
         <div className="nav-content">
           <div className="logo">
-            <img src="%PUBLIC_URL%/logo.png" alt="Logo" />
+            <img src={logoImg} alt="Logo" />
           </div>
           <ul className="menu">
             <li>

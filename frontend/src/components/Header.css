@@ -57,12 +57,24 @@ nav {
   color: #666; /* Cor dos links */
   text-decoration: none; /* Remover sublinhado */
   font-size: 16px; /* Tamanho da fonte dos links */
+  position: relative; /* Necessário para o pseudo-elemento */
 }
 
-.menu a:hover {
-  text-decoration: underline; /* Adicionar sublinhado ao passar o mouse */
+.menu a::after {
+  content: ''; /* Necessário para o pseudo-elemento */
+  display: block; /* Faz o pseudo-elemento ocupar espaço */
+  width: 0; /* Começa com largura 0 */
+  height: 1px; /* Altura do sublinhado */
+  background: #666; /* Cor do sublinhado */
+  transition: width 0.4s ease; /* Transição suave da largura */
+  position: absolute; /* Posiciona o pseudo-elemento */
+  left: 0; /* Alinha à esquerda */
+  bottom: -5.5px; /* Posiciona abaixo do texto */
 }
 
+.menu a:hover::after {
+  width: 100%; /* A largura do sublinhado se expande para 100% ao passar o mouse */
+}
 /* Responsividade */
 @media (max-width: 768px) {
   .nav-content {
