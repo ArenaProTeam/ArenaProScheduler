@@ -2,11 +2,11 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom' // Usando Routes em vez de Switch
 import Header from './components/Header'
-import Home from './components/Home'
-import About from './components/About'
-import Structure from './components/Structure'
-import Contact from './components/Contact'
-import Reserve from './components/Reserve'
+import Home from './pages/Home'
+import About from './pages/About'
+import Structure from './pages/Structure'
+import Contact from './pages/Contact'
+import Reserve from './pages/Reserve'
 import Footer from './components/Footer'
 
 const App = () => {
