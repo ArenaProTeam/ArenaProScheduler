@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom' // Usando Routes em vez de Switch
 import Header from './components/Header'
@@ -11,7 +10,9 @@ import Footer from './components/Footer'
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/ArenaProScheduler">
+      {' '}
+      {/* Adicionando o basename aqui */}
       <Header />
       <div className="content-container">
         <main>
