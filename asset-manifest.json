@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/ArenaProScheduler/static/css/main.4f2a7a15.css",
+    "main.css": "/ArenaProScheduler/static/css/main.6113282a.css",
     "main.js": "/ArenaProScheduler/static/js/main.5580b328.js",
     "static/media/raquete.png": "/ArenaProScheduler/static/media/raquete.1888c1b4376a92a8cb6e.png",
     "static/media/jogador-03.png": "/ArenaProScheduler/static/media/jogador-03.6e52c394833ec8523be0.png",
@@ -10,11 +10,11 @@
     "static/media/logo.png": "/ArenaProScheduler/static/media/logo.913a4789e55d4ee30ab7.png",
     "static/media/logo-arenapro.png": "/ArenaProScheduler/static/media/logo-arenapro.3551a4bec6d82bf1c1f4.png",
     "index.html": "/ArenaProScheduler/index.html",
-    "main.4f2a7a15.css.map": "/ArenaProScheduler/static/css/main.4f2a7a15.css.map",
+    "main.6113282a.css.map": "/ArenaProScheduler/static/css/main.6113282a.css.map",
     "main.5580b328.js.map": "/ArenaProScheduler/static/js/main.5580b328.js.map"
   },
   "entrypoints": [
-    "static/css/main.4f2a7a15.css",
+    "static/css/main.6113282a.css",
     "static/js/main.5580b328.js"
   ]
 }
