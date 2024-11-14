@@ -40,22 +40,6 @@ body {
   height: auto;
 }
 
-@media (max-width: 768px) {
-  .hero-contents {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-text {
-    max-width: 100%;
-    text-align: center;
-  }
-
-  .hero-image {
-    width: 100%;
-  }
-}
-
 .cards {
   display: flex;
   flex-wrap: wrap; /* Permite que os cards se movam para a próxima linha */
@@ -152,10 +136,49 @@ body {
 }
 
 .reserve-button:hover {
-  background-color: #444444 !important; /* Cor cinza ao passar o mouse */
+  background-color: #444 !important; /* Cor cinza ao passar o mouse */
 }
 
 .reserve-button:focus {
   background-color: #191A23; /* Mantém a cor ao focar */
   outline: none; /* Remove o contorno padrão */
+}
+
+@media (max-width: 768px) {
+  body {
+    margin-top: 150px;
+  }
+
+  .hero-contents {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-text {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-image {
+    width: 100%;
+  }
+
+  .hero-button {
+    margin-bottom: 40px; 
+  }
+
+  .card {
+    padding: 40px;
+  }
+
+  .card-image {
+    display: none;
+  }
+
+  .card-text {
+    flex: 0 1 100%; 
+    letter-spacing: 0.2px;
+  }
+
+
 }

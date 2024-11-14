@@ -81,10 +81,11 @@ footer {
   margin-bottom: 20px;
   align-items: center; /* Alinha verticalmente a logo e o texto */
   justify-content: center; /* Centraliza todos os itens no footer */
+  max-width: 50%;
 }
 
   .footer-links {
-    flex-direction: column; /* Coloca Menu e Nos Encontre em coluna */
+    flex-direction: flex; /* Coloca Menu e Nos Encontre em coluna */
     align-items: center; /* Centraliza os itens */
   }
 }

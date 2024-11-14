@@ -7,7 +7,6 @@ const About = () => {
     <div className="about-container">
       <h1>Quem Somos</h1>
       <p>
-        <br></br>
         Bem-vindo ao ARENA PRO! Somos uma equipe apaixonada por esportes de
         praia, dedicada a oferecer a melhor experiência em beach tennis e beach
         volley para atletas de todos os níveis. Nossa missão é ser referência em
@@ -15,7 +14,6 @@ const About = () => {
         de ponta com um serviço excepcional ao cliente.
       </p>
       <p>
-        <br></br>
         Queremos incentivar um estilo de vida saudável e ativo, promovendo a
         integração social e o respeito pelo meio ambiente. Visamos ser
         reconhecidos como líderes no segmento de esportes de praia, impactando
@@ -23,7 +21,6 @@ const About = () => {
         convivência ao ar livre.
       </p>
       <p>
-        <br></br>
         Valorizamos a excelência, a paixão pelo esporte, a comunidade e a
         sustentabilidade. Contamos com arenas modernas, quadras de areia bem
         mantidas, iluminação de alta qualidade, áreas de convivência
@@ -31,13 +28,11 @@ const About = () => {
         estacionamento.
       </p>
       <p>
-        <br></br>
         Nossa equipe é composta por profissionais experientes e dedicados,
         sempre prontos para oferecer o melhor atendimento. Venha nos conhecer e
         faça parte da nossa comunidade de esportistas, onde energia e alegria se
         encontram na areia!
       </p>
-      <br></br>
       <button className="reserve-button">RESERVA ONLINE</button>
     </div>
   )
