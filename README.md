@@ -37,6 +37,7 @@ beach-arena-scheduler/
 │       └── index.js
 ├── package.json
 └── README.md
+```
 
 # Sistema de Agendamento de Arena
 
