@@ -38,7 +38,10 @@ const Header = () => {
               <Link to="/contato">Contato</Link>
             </li>
             <li>
-              <Link to="/reserva-online">Reserva Online</Link>
+              <Link to="/reservas">Reservas</Link>
+            </li>
+            <li>
+              <Link to="../login">Entrar / Cadastre-se</Link>
             </li>
           </ul>
         </div>
