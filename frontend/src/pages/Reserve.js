@@ -54,15 +54,15 @@ const Reserve = () => {
     {
       user: 'Ana Clara',
       horario: '14:00 - 15:00',
-      data: '10/10/2023',
-      quantidade: 2, // Adicionando a quantidade de pessoas
+      data: '29/11/2024',
+      quantidade: 2,
       status: 'Pendente'
     },
     {
       user: 'Pedro Oliveira',
       horario: '15:00 - 16:00',
-      data: '11/10/2023',
-      quantidade: 4, // Adicionando a quantidade de pessoas
+      data: '30/11/2024',
+      quantidade: 4,
       status: 'Confirmado'
     }
   ]
@@ -201,7 +201,7 @@ const Reserve = () => {
             <th>Usuário</th>
             <th>Data</th>
             <th>Horário</th>
-            <th>Qtde pessoas</th>
+            <th>Qtde Pessoas</th>
             <th>Status</th>
             <th>Ações</th>
           </tr>
@@ -243,7 +243,7 @@ const Reserve = () => {
               />
             </label>
             <label>
-              Qtde pessoas:
+              Quantidade de pessoas:
               <input
                 type="number"
                 value={quantidade}
