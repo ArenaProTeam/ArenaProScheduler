@@ -1,92 +1,80 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Reserve.css'
 
-const Reserve = () => {
-  const horarios = [
+const Reserve = ({ isLoggedIn }) => {
+  const navigate = useNavigate() // Instância de navegação
+
+  const initialHorarios = [
     {
       time: '07:40 - 08:30',
-      seg: 'Disponível',
-      ter: 'Disponível',
-      qua: 'Disponível',
-      qui: 'Disponível',
-      sex: 'Indisponível',
-      sab: 'Indisponível'
+      seg: true,
+      ter: true,
+      qua: true,
+      qui: true,
+      sex: true,
+      sab: true
     },
     {
       time: '08:30 - 09:20',
-      seg: 'Indisponível',
-      ter: 'Indisponível',
-      qua: 'Indisponível',
-      qui: 'Disponível',
-      sex: 'Indisponível',
-      sab: 'Disponível'
+      seg: true,
+      ter: true,
+      qua: true,
+      qui: true,
+      sex: true,
+      sab: true
     },
     {
       time: '09:30 - 10:20',
-      seg: 'Disponível',
-      ter: 'Disponível',
-      qua: 'Disponível',
-      qui: 'Indisponível',
-      sex: 'Indisponível',
-      sab: 'Indisponível'
+      seg: true,
+      ter: true,
+      qua: true,
+      qui: true,
+      sex: true,
+      sab: true
     },
     {
       time: '10:20 - 11:10',
-      seg: 'Indisponível',
-      ter: 'Indisponível',
-      qua: 'Disponível',
-      qui: 'Disponível',
-      sex: 'Indisponível',
-      sab: 'Indisponível'
+      seg: true,
+      ter: true,
+      qua: true,
+      qui: true,
+      sex: true,
+      sab: true
     },
     {
       time: '11:20 - 12:10',
-      seg: 'Indisponível',
-      ter: 'Disponível',
-      qua: 'Indisponível',
-      qui: 'Indisponível',
-      sex: 'Indisponível',
-      sab: 'Indisponível'
+      seg: true,
+      ter: true,
+      qua: true,
+      qui: true,
+      sex: true,
+      sab: true
     }
   ]
 
-  const consultas = [
-    {
-      user: 'Ana Clara',
-      horario: '14:00 - 15:00',
-      data: '29/11/2024',
-      quantidade: 2,
-      status: 'Pendente'
-    },
-    {
-      user: 'Pedro Oliveira',
-      horario: '15:00 - 16:00',
-      data: '30/11/2024',
-      quantidade: 4,
-      status: 'Confirmado'
-    }
-  ]
-
+  const [horarios, setHorarios] = useState(initialHorarios)
+  const [consultas, setConsultas] = useState([])
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
   const [selectedTime, setSelectedTime] = useState('')
-  const [selectedDate, setSelectedDate] = useState('') // Inicializa como string vazia
+  const [selectedDate, setSelectedDate] = useState('')
   const [selectedConsulta, setSelectedConsulta] = useState(null)
-
-  const [nome, setNome] = useState('')
-  const [quantidade, setQuantidade] = useState('')
-  const [telefone, setTelefone] = useState('')
-
-  const getNextDate = dayOffset => {
-    const today = new Date()
-    const nextDate = new Date(today)
-    nextDate.setDate(today.getDate() + ((dayOffset + 7) % 7))
-    return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
-  }
-
+  const [formData, setFormData] = useState({
+    nome: '',
+    quantidade: '',
+    telefone: ''
+  })
   const [nextDates, setNextDates] = useState({})
 
   useEffect(() => {
+    const getNextDate = dayOffset => {
+      const today = new Date()
+      const nextDate = new Date(today)
+      nextDate.setDate(today.getDate() + ((dayOffset + 7) % 7))
+      return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
+    }
+
     const dates = {
       seg: getNextDate(1 - new Date().getDay()),
       ter: getNextDate(2 - new Date().getDay()),
@@ -95,40 +83,61 @@ const Reserve = () => {
       sex: getNextDate(5 - new Date().getDay()),
       sab: getNextDate(6 - new Date().getDay())
     }
+
     setNextDates(dates)
   }, [])
 
   const handleAvailableClick = (time, day) => {
+    if (!isLoggedIn) {
+      alert('Você precisa estar logado para reservar!')
+      navigate('/login') // Redireciona para a tela de login
+      return
+    }
     setSelectedTime(time)
-    setSelectedDate(nextDates[day]) // Atualiza a seleção de data com a data correta
+    setSelectedDate(nextDates[day])
     setIsPopupOpen(true)
   }
 
   const closePopup = () => {
     setIsPopupOpen(false)
-    setNome('')
-    setQuantidade('')
-    setTelefone('')
+    setFormData({ nome: '', quantidade: '', telefone: '' })
   }
 
   const submitForm = () => {
+    const { nome, quantidade, telefone } = formData
+
     if (!nome || !quantidade || !telefone) {
       alert('Por favor, preencha todos os campos!')
       return
     }
 
+    const newConsulta = {
+      user: nome,
+      horario: selectedTime,
+      data: selectedDate,
+      quantidade: parseInt(quantidade)
+    }
+
+    setConsultas(prevConsultas => [...prevConsultas, newConsulta])
+
+    // Atualiza os horários para marcar como indisponível
+    setHorarios(prevHorarios =>
+      prevHorarios.map(horario => {
+        if (horario.time === selectedTime) {
+          return {
+            ...horario,
+            [Object.keys(nextDates).find(
+              day => nextDates[day] === selectedDate
+            )]: false
+          }
+        }
+        return horario
+      })
+    )
+
     alert(
       `Reserva realizada com sucesso para ${nome}, ${quantidade} pessoas, telefone: ${telefone}.`
     )
-
-    consultas.push({
-      user: nome,
-      horario: selectedTime,
-      data: selectedDate, // Usa a data selecionada
-      quantidade: parseInt(quantidade),
-      status: 'Pendente'
-    })
-
     closePopup()
   }
 
@@ -138,14 +147,24 @@ const Reserve = () => {
   }
 
   const confirmCancel = () => {
+    setConsultas(prevConsultas =>
+      prevConsultas.filter(c => c !== selectedConsulta)
+    )
     alert(`Reserva de ${selectedConsulta.user} cancelada com sucesso.`)
-    setIsConfirmPopupOpen(false)
-    setSelectedConsulta(null)
+    closeConfirmPopup()
+
+    // Redireciona para a tela de login após o cancelamento
+    navigate('/login')
   }
 
   const closeConfirmPopup = () => {
     setIsConfirmPopupOpen(false)
     setSelectedConsulta(null)
+  }
+
+  const handleInputChange = e => {
+    const { name, value } = e.target
+    setFormData(prevData => ({ ...prevData, [name]: value }))
   }
 
   return (
@@ -157,12 +176,11 @@ const Reserve = () => {
         <thead>
           <tr>
             <th>Horário</th>
-            <th>Segunda ({nextDates.seg})</th>
-            <th>Terça ({nextDates.ter})</th>
-            <th>Quarta ({nextDates.qua})</th>
-            <th>Quinta ({nextDates.qui})</th>
-            <th>Sexta ({nextDates.sex})</th>
-            <th>Sábado ({nextDates.sab})</th>
+            {Object.keys(nextDates).map(day => (
+              <th key={day}>{`${day.charAt(0).toUpperCase() + day.slice(1)} (${
+                nextDates[day]
+              })`}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -171,15 +189,15 @@ const Reserve = () => {
               <td>{horario.time}</td>
               {['seg', 'ter', 'qua', 'qui', 'sex', 'sab'].map((day, idx) => (
                 <td key={idx}>
-                  {horario[day] === 'Disponível' ? (
+                  {horario[day] ? (
                     <button
                       className="available"
                       onClick={() => handleAvailableClick(horario.time, day)}
                     >
-                      {horario[day]}
+                      Disponível
                     </button>
                   ) : (
-                    <span className="unavailable">{horario[day]}</span>
+                    <span className="unavailable">Indisponível</span>
                   )}
                 </td>
               ))}
@@ -196,7 +214,6 @@ const Reserve = () => {
             <th>Data</th>
             <th>Horário</th>
             <th>Qtde Pessoas</th>
-            <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -207,7 +224,6 @@ const Reserve = () => {
               <td>{consulta.data}</td>
               <td>{consulta.horario}</td>
               <td>{consulta.quantidade}</td>
-              <td>{consulta.status}</td>
               <td>
                 <button
                   className="cancel-button"
@@ -225,31 +241,33 @@ const Reserve = () => {
         <div className="popup">
           <div className="popup-content">
             <h3>
-              Reservar para {selectedTime} - {selectedDate}{' '}
-              {/* Exibe a data correta */}
+              Reservar para {selectedTime} - {selectedDate}
             </h3>
             <label>
               Nome:
               <input
                 type="text"
-                value={nome}
-                onChange={e => setNome(e.target.value)}
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
               />
             </label>
             <label>
               Quantidade de pessoas:
               <input
                 type="number"
-                value={quantidade}
-                onChange={e => setQuantidade(e.target.value)}
+                name="quantidade"
+                value={formData.quantidade}
+                onChange={handleInputChange}
               />
             </label>
             <label>
               Telefone:
               <input
                 type="tel"
-                value={telefone}
-                onChange={e => setTelefone(e.target.value)}
+                name="telefone"
+                value={formData.telefone}
+                onChange={handleInputChange}
               />
             </label>
             <button onClick={submitForm}>Enviar Reserva</button>

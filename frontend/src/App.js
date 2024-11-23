@@ -29,7 +29,11 @@ const AppContent = ({ isLoggedIn, onLogout, onLogin }) => {
             <Route path="/quem-somos" element={<About />} />
             <Route path="/estrutura" element={<Structure />} />
             <Route path="/contato" element={<Contact />} />
-            <Route path="/reservas" element={<Reserve />} />
+            {/* Passando isLoggedIn para o componente Reserve */}
+            <Route
+              path="/reservas"
+              element={<Reserve isLoggedIn={isLoggedIn} onLogout={onLogout} />}
+            />
             <Route
               path="/login"
               element={
