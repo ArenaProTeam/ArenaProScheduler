@@ -1,0 +1,62 @@
+.reserve-container {
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: limegreen; /* Cor do título */
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.dates {
+  margin-bottom: 20px;
+}
+
+.date-button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  background-color: #ababab;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.date-button:hover {
+  background-color: #ddd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.reserve-button {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.reserve-button:hover {
+  background-color: #45a049; /* Cor ao passar o mouse */
+}
