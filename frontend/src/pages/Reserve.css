@@ -23,19 +23,21 @@ h3 {
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+  width: 100%; /* Define a tabela para usar 100% da largura disponível */
+  table-layout: fixed; /* Garante que todas as colunas tenham o mesmo tamanho */
+  border-collapse: collapse; /* Remove espaçamento entre as células */
 }
 
 th, td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
+  border: 1px solid #ddd; /* Adiciona bordas às células */
+  padding: 10px; /* Define um preenchimento interno */
+  text-align: center; /* Centraliza o texto */
+  overflow: hidden; /* Oculta o texto que excede a largura da célula */
+  white-space: nowrap; /* Evita quebras de linha dentro das células */
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #f2f2f2; /* Cor de fundo para cabeçalhos */
 }
 
 .available {

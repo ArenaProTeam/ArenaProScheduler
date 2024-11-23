@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Reserve.css'
 
 const Reserve = () => {
@@ -55,23 +55,48 @@ const Reserve = () => {
       user: 'Ana Clara',
       horario: '14:00 - 15:00',
       data: '10/10/2023',
+      quantidade: 2, // Adicionando a quantidade de pessoas
       status: 'Pendente'
     },
     {
       user: 'Pedro Oliveira',
       horario: '15:00 - 16:00',
       data: '11/10/2023',
+      quantidade: 4, // Adicionando a quantidade de pessoas
       status: 'Confirmado'
     }
   ]
 
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
   const [selectedTime, setSelectedTime] = useState('')
+  const [selectedDate, setSelectedDate] = useState({})
+  const [selectedConsulta, setSelectedConsulta] = useState(null)
 
   // Novos estados para o formulário
   const [nome, setNome] = useState('')
   const [quantidade, setQuantidade] = useState('')
   const [telefone, setTelefone] = useState('')
+
+  // Função para calcular a próxima data
+  const getNextDate = dayOffset => {
+    const today = new Date()
+    const nextDate = new Date(today)
+    nextDate.setDate(today.getDate() + ((dayOffset + 7) % 7))
+    return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
+  }
+
+  useEffect(() => {
+    const nextDates = {
+      seg: getNextDate(1 - new Date().getDay()),
+      ter: getNextDate(2 - new Date().getDay()),
+      qua: getNextDate(3 - new Date().getDay()),
+      qui: getNextDate(4 - new Date().getDay()),
+      sex: getNextDate(5 - new Date().getDay()),
+      sab: getNextDate(6 - new Date().getDay())
+    }
+    setSelectedDate(nextDates)
+  }, [])
 
   const handleAvailableClick = time => {
     setSelectedTime(time)
@@ -86,20 +111,47 @@ const Reserve = () => {
     setTelefone('')
   }
 
-  // Função para validar e enviar o formulário
   const submitForm = () => {
     if (!nome || !quantidade || !telefone) {
       alert('Por favor, preencha todos os campos!')
       return
     }
 
-    // Aqui você pode adicionar a lógica para armazenar a reserva
     alert(
       `Reserva realizada com sucesso para ${nome}, ${quantidade} pessoas, telefone: ${telefone}.`
     )
 
+    // Adiciona nova consulta
+    consultas.push({
+      user: nome,
+      horario: selectedTime,
+      data: new Date().toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      quantidade: parseInt(quantidade),
+      status: 'Pendente'
+    })
+
     // Fechar o popup e limpar os campos
     closePopup()
+  }
+
+  const handleCancelClick = consulta => {
+    setSelectedConsulta(consulta)
+    setIsConfirmPopupOpen(true)
+  }
+
+  const confirmCancel = () => {
+    alert(`Reserva de ${selectedConsulta.user} cancelada com sucesso.`)
+    setIsConfirmPopupOpen(false)
+    setSelectedConsulta(null)
+  }
+
+  const closeConfirmPopup = () => {
+    setIsConfirmPopupOpen(false)
+    setSelectedConsulta(null)
   }
 
   return (
@@ -111,90 +163,32 @@ const Reserve = () => {
         <thead>
           <tr>
             <th>Horário</th>
-            <th>Segunda</th>
-            <th>Terça</th>
-            <th>Quarta</th>
-            <th>Quinta</th>
-            <th>Sexta</th>
-            <th>Sábado</th>
+            <th>Segunda ({selectedDate.seg})</th>
+            <th>Terça ({selectedDate.ter})</th>
+            <th>Quarta ({selectedDate.qua})</th>
+            <th>Quinta ({selectedDate.qui})</th>
+            <th>Sexta ({selectedDate.sex})</th>
+            <th>Sábado ({selectedDate.sab})</th>
           </tr>
         </thead>
         <tbody>
           {horarios.map((horario, index) => (
             <tr key={index}>
               <td>{horario.time}</td>
-              <td>
-                {horario.seg === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.seg}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.seg}</span>
-                )}
-              </td>
-              <td>
-                {horario.ter === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.ter}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.ter}</span>
-                )}
-              </td>
-              <td>
-                {horario.qua === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.qua}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.qua}</span>
-                )}
-              </td>
-              <td>
-                {horario.qui === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.qui}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.qui}</span>
-                )}
-              </td>
-              <td>
-                {horario.sex === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.sex}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.sex}</span>
-                )}
-              </td>
-              <td>
-                {horario.sab === 'Disponível' ? (
-                  <button
-                    className="available"
-                    onClick={() => handleAvailableClick(horario.time)}
-                  >
-                    {horario.sab}
-                  </button>
-                ) : (
-                  <span className="unavailable">{horario.sab}</span>
-                )}
-              </td>
+              {['seg', 'ter', 'qua', 'qui', 'sex', 'sab'].map((day, idx) => (
+                <td key={idx}>
+                  {horario[day] === 'Disponível' ? (
+                    <button
+                      className="available"
+                      onClick={() => handleAvailableClick(horario.time)}
+                    >
+                      {horario[day]}
+                    </button>
+                  ) : (
+                    <span className="unavailable">{horario[day]}</span>
+                  )}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
@@ -205,8 +199,9 @@ const Reserve = () => {
         <thead>
           <tr>
             <th>Usuário</th>
-            <th>Horário</th>
             <th>Data</th>
+            <th>Horário</th>
+            <th>Qtde pessoas</th>
             <th>Status</th>
             <th>Ações</th>
           </tr>
@@ -215,11 +210,18 @@ const Reserve = () => {
           {consultas.map((consulta, index) => (
             <tr key={index}>
               <td>{consulta.user}</td>
-              <td>{consulta.horario}</td>
               <td>{consulta.data}</td>
+              <td>{consulta.horario}</td>
+              <td>{consulta.quantidade}</td>{' '}
+              {/* Adicionando a quantidade aqui */}
               <td>{consulta.status}</td>
               <td>
-                <button className="cancel-button">Cancelar</button>
+                <button
+                  className="cancel-button"
+                  onClick={() => handleCancelClick(consulta)}
+                >
+                  Cancelar
+                </button>
               </td>
             </tr>
           ))}
@@ -229,7 +231,9 @@ const Reserve = () => {
       {isPopupOpen && (
         <div className="popup">
           <div className="popup-content">
-            <h3>Reservar para {selectedTime}</h3>
+            <h3>
+              Reservar para {selectedTime} - {selectedDate.seg}
+            </h3>
             <label>
               Nome:
               <input
@@ -239,7 +243,7 @@ const Reserve = () => {
               />
             </label>
             <label>
-              Quantidade de pessoas:
+              Qtde pessoas:
               <input
                 type="number"
                 value={quantidade}
@@ -256,6 +260,20 @@ const Reserve = () => {
             </label>
             <button onClick={submitForm}>Enviar Reserva</button>
             <button onClick={closePopup}>Fechar</button>
+          </div>
+        </div>
+      )}
+
+      {isConfirmPopupOpen && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Confirmar Cancelamento</h3>
+            <p>
+              Tem certeza que deseja cancelar a reserva de{' '}
+              {selectedConsulta?.user}?
+            </p>
+            <button onClick={confirmCancel}>Confirmar</button>
+            <button onClick={closeConfirmPopup}>Cancelar</button>
           </div>
         </div>
       )}
