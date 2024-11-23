@@ -1,4 +1,3 @@
-// src/components/Footer.js
 import React from 'react'
 import './Footer.css'
 import logoImg from '../assets/logo.png' // Substitua pelo caminho correto da sua imagem

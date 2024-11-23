@@ -1,13 +1,17 @@
-/* src/components/Home.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  margin: 0 auto;
+  margin: 0;
   font-family: Arial, sans-serif;
   margin-top: 70px;
 }
 
 .hero {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   max-width: 100%;
 }
 
@@ -17,7 +21,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 78.5%;
+  max-width: 80%;
 }
 
 .hero-contents p {
@@ -28,7 +32,7 @@ body {
 .hero-text {
   max-width: 36%;
   text-align: left;
-  color: #333; 
+  color: #333;
 }
 
 .hero-image {
@@ -40,7 +44,115 @@ body {
   height: auto;
 }
 
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 81%;
+  margin-top: 40px;
+}
+
+.card {
+  border: 1px solid #191A23;
+  border-radius: 30px;
+  margin: 10px;
+  padding: 40px;
+  flex: 1 1 calc(45% - 20px);
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.card-text {
+  flex: 0 1 60%;
+  letter-spacing: 0.2px;
+}
+
+.card-image {
+  flex: 0 1 35%;
+  margin-left: 40px;
+}
+
+.card-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card h2 {
+  font-size: 2rem;
+  margin-bottom: 5%;
+}
+
+.card p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.card a {
+  position: relative;
+  margin-top: 5px;
+  text-align: right;
+  color: #333;
+  text-decoration: none;
+}
+
+.card a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.card a:hover::after {
+  transform: scaleX(1);
+}
+
+.hero-button {
+  margin-top: 0;
+  display: flex;
+  justify-content: flex-start !important;
+  width: 100%;
+}
+
+.reserve-button {
+  background-color: #2C2C2C !important;
+  color: white !important;
+  padding: 15px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.reserve-button:hover {
+  background-color: #444 !important;
+}
+
+.reserve-button:focus {
+  background-color: #191A23;
+  outline: none;
+}
+
 @media (max-width: 768px) {
+  body {
+    margin-top: 150px;
+  }
+
   .hero-contents {
     flex-direction: column;
     align-items: center;
@@ -52,110 +164,25 @@ body {
   }
 
   .hero-image {
-    width: 100%;
+    display: none;
   }
-}
 
-.cards {
-  display: flex;
-  flex-wrap: wrap; /* Permite que os cards se movam para a próxima linha */
-  justify-content: space-between; /* Espaça os cards */
-  margin: 0 auto;
-  max-width: 80%;
-  margin-top: 40px;
-}
+  .hero-button {
+    margin-bottom: 0;
+  }
 
-.card {
-  border: 1px solid #191A23;
-  border-radius: 30px;
-  margin: 10px;
-  padding: 40px;
-  flex: 1 1 calc(45% - 20px); /* Responsividade - 2 em 2 */
-  display: flex; /* Adiciona flexbox ao card */
-  flex-direction: column; /* Coloca o conteúdo em coluna */
-  min-height: 300px; /* Altura mínima do card */
-  position: relative; /* Para permitir o posicionamento do link */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra do card */
-}
+  .card {
+    padding: 40px;
+    flex: 1 1 100%;
+    margin: 10px 0;
+  }
 
-.card-content {
-  display: flex;
-  justify-content: space-between; /* Espaça o texto e a imagem */
-  align-items: flex-start; /* Alinha os itens no topo */
-  flex: 1; /* Faz o conteúdo ocupar todo o espaço disponível */
-}
+  .card-image {
+    display: none;
+  }
 
-.card-text {
-  flex: 0 1 60%; /* Permite que o texto ocupe 60% do espaço */
-  letter-spacing: 0.2px;
-}
-
-.card-image {
-  flex: 0 1 35%; /* Permite que a imagem ocupe 40% do espaço */
-  margin-left: 40px; /* Adiciona um espaço entre o texto e a imagem */
-}
-
-.card-image img {
-  max-width: 100%; /* Ajusta a largura da imagem */
-  height: auto; /* Mantém a proporção da imagem */
-}
-
-.card h2 {
-  font-size: 2rem; /* Tamanho do título */
-  margin-bottom: 5%; /* Espaço abaixo do título */
-}
-
-.card p {
-  font-size: 0.9rem; /* Tamanho do conteúdo */
-  margin: 0; /* Remove margens superior e inferior */
-}
-
-.card a {
-  position: relative; /* Necessário para o posicionamento do pseudo-elemento */
-  margin-top: 5px; /* Pequena margem acima do link, se necessário */
-  text-align: right; /* Alinha o texto à direita */
-  color: #333; /* Cor padrão do link, que pode ser sobrescrita */
-  text-decoration: none; /* Remove sublinhado do link */
-}
-
-.card a::after {
-  content: ''; /* Necessário para criar o pseudo-elemento */
-  position: absolute; /* Posiciona o sublinhado */
-  left: 0; /* Alinha à esquerda do texto */
-  bottom: -4px; /* Posiciona no fundo do texto */
-  width: 100%; /* Largura do sublinhado igual à do texto */
-  height: 1px; /* Altura do sublinhado */
-  background-color: currentColor; /* Usa a cor atual do texto */
-  transform: scaleX(0); /* Inicialmente, o sublinhado está escondido */
-  transition: transform 0.3s ease; /* Adiciona transição suave */
-}
-
-.card a:hover::after {
-  transform: scaleX(1); /* Mostra o sublinhado ao passar o mouse */
-}
-
-.hero-button {
-  margin-top: 0; /* Espaço acima do botão */
-  display: flex; /* Usar flexbox para o contêiner do botão */
-  justify-content: flex-start !important; /* Alinha o botão à esquerda */
-  width: 100%; /* Garante que o botão ocupe toda a largura disponível */
-}
-
-.reserve-button {
-  background-color: #191A23 !important; /* Cor padrão do botão */
-  color: white !important; /* Cor do texto */
-  padding: 15px 20px; /* Espaçamento interno */
-  border: none; /* Remove a borda padrão */
-  cursor: pointer; /* Muda o cursor para pointer */
-  transition: background-color 0.3s ease; /* Transição suave */
-  display: inline-block; /* Permite que o botão ocupe apenas o espaço necessário */
-}
-
-.reserve-button:hover {
-  background-color: #444444 !important; /* Cor cinza ao passar o mouse */
-}
-
-.reserve-button:focus {
-  background-color: #191A23; /* Mantém a cor ao focar */
-  outline: none; /* Remove o contorno padrão */
+  .card-text {
+    flex: 0 1 100%;
+    letter-spacing: 0.2px;
+  }
 }

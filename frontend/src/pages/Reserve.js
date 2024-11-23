@@ -1,171 +1,226 @@
-// src/components/Reserve.js
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Reserve.css'
-import './ReservationModal.css' // Importar estilos do modal
-
-const ReservationModal = ({ isOpen, onClose, onSubmit, quadra }) => {
-  const [nome, setNome] = useState('')
-  const [qtdePessoas, setQtdePessoas] = useState('')
-  const [telefone, setTelefone] = useState('')
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    const reservaData = { nome, qtdePessoas, telefone, quadra }
-
-    try {
-      const response = await fetch(
-        'http://localhost:5000/api/arenas/reservas',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(reservaData)
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Erro ao criar reserva: ' + response.statusText)
-      }
-
-      const data = await response.json()
-      console.log(data) // Log da resposta da API
-      onSubmit(reservaData) // Chama a função onSubmit passada como prop
-      onClose() // Fecha o modal após o envio
-    } catch (error) {
-      console.error('Erro ao criar reserva:', error)
-    }
-  }
-
-  if (!isOpen) return null
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Reservar</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Nome:
-            <input
-              type="text"
-              value={nome}
-              onChange={e => setNome(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Qtde de Pessoas:
-            <input
-              type="number"
-              value={qtdePessoas}
-              onChange={e => setQtdePessoas(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Telefone:
-            <input
-              type="tel"
-              value={telefone}
-              onChange={e => setTelefone(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Confirmar Reserva</button>
-          <button type="button" onClick={onClose}>
-            Cancelar
-          </button>
-        </form>
-      </div>
-    </div>
-  )
-}
 
 const Reserve = () => {
-  const [selectedDate, setSelectedDate] = useState('26/08') // Data padrão
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedQuadra, setSelectedQuadra] = useState('') // Para armazenar a quadra selecionada
-  const reservasData = {
-    '25/08': [
-      {
-        data: '25/08 - 07:00 às 08:00',
-        valor: 'R$ 200,00',
-        piso: 'Areia',
-        coberta: 'Não',
-        quadra: 'Quadra 01'
-      }
-      // ... outras reservas
-    ],
-    '26/08': [
-      {
-        data: '26/08 - 07:00 às 08:00',
-        valor: 'R$ 200,00',
-        piso: 'Areia',
-        coberta: 'Não',
-        quadra: 'Quadra 01'
-      }
-      // ... outras reservas
-    ]
-    // ... mais datas
+  const horarios = [
+    {
+      time: '07:40 - 08:30',
+      seg: 'Disponível',
+      ter: 'Disponível',
+      qua: 'Disponível',
+      qui: 'Disponível',
+      sex: 'Indisponível',
+      sab: 'Indisponível'
+    },
+    {
+      time: '08:30 - 09:20',
+      seg: 'Indisponível',
+      ter: 'Indisponível',
+      qua: 'Indisponível',
+      qui: 'Disponível',
+      sex: 'Indisponível',
+      sab: 'Disponível'
+    },
+    {
+      time: '09:30 - 10:20',
+      seg: 'Disponível',
+      ter: 'Disponível',
+      qua: 'Disponível',
+      qui: 'Indisponível',
+      sex: 'Indisponível',
+      sab: 'Indisponível'
+    },
+    {
+      time: '10:20 - 11:10',
+      seg: 'Indisponível',
+      ter: 'Indisponível',
+      qua: 'Disponível',
+      qui: 'Disponível',
+      sex: 'Indisponível',
+      sab: 'Indisponível'
+    },
+    {
+      time: '11:20 - 12:10',
+      seg: 'Indisponível',
+      ter: 'Disponível',
+      qua: 'Indisponível',
+      qui: 'Indisponível',
+      sex: 'Indisponível',
+      sab: 'Indisponível'
+    }
+  ]
+
+  const consultas = [
+    {
+      user: 'Ana Clara',
+      horario: '14:00 - 15:00',
+      data: '29/11/2024',
+      quantidade: 2,
+      status: 'Pendente'
+    },
+    {
+      user: 'Pedro Oliveira',
+      horario: '15:00 - 16:00',
+      data: '30/11/2024',
+      quantidade: 4,
+      status: 'Confirmado'
+    }
+  ]
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
+  const [selectedTime, setSelectedTime] = useState('')
+  const [selectedDate, setSelectedDate] = useState({})
+  const [selectedConsulta, setSelectedConsulta] = useState(null)
+
+  // Novos estados para o formulário
+  const [nome, setNome] = useState('')
+  const [quantidade, setQuantidade] = useState('')
+  const [telefone, setTelefone] = useState('')
+
+  // Função para calcular a próxima data
+  const getNextDate = dayOffset => {
+    const today = new Date()
+    const nextDate = new Date(today)
+    nextDate.setDate(today.getDate() + ((dayOffset + 7) % 7))
+    return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
   }
 
-  const handleDateClick = date => {
-    setSelectedDate(date)
+  useEffect(() => {
+    const nextDates = {
+      seg: getNextDate(1 - new Date().getDay()),
+      ter: getNextDate(2 - new Date().getDay()),
+      qua: getNextDate(3 - new Date().getDay()),
+      qui: getNextDate(4 - new Date().getDay()),
+      sex: getNextDate(5 - new Date().getDay()),
+      sab: getNextDate(6 - new Date().getDay())
+    }
+    setSelectedDate(nextDates)
+  }, [])
+
+  const handleAvailableClick = time => {
+    setSelectedTime(time)
+    setIsPopupOpen(true)
   }
 
-  const handleReserveClick = quadra => {
-    setSelectedQuadra(quadra) // Armazena a quadra selecionada
-    setIsModalOpen(true)
+  const closePopup = () => {
+    setIsPopupOpen(false)
+    // Limpar os campos do formulário ao fechar
+    setNome('')
+    setQuantidade('')
+    setTelefone('')
   }
 
-  const handleModalSubmit = data => {
-    // Aqui você pode lidar com o que fazer após a reserva ser feita
-    console.log('Reserva feita:', data)
-    setIsModalOpen(false) // Fecha o modal após o envio
+  const submitForm = () => {
+    if (!nome || !quantidade || !telefone) {
+      alert('Por favor, preencha todos os campos!')
+      return
+    }
+
+    alert(
+      `Reserva realizada com sucesso para ${nome}, ${quantidade} pessoas, telefone: ${telefone}.`
+    )
+
+    // Adiciona nova consulta
+    consultas.push({
+      user: nome,
+      horario: selectedTime,
+      data: new Date().toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }),
+      quantidade: parseInt(quantidade),
+      status: 'Pendente'
+    })
+
+    // Fechar o popup e limpar os campos
+    closePopup()
+  }
+
+  const handleCancelClick = consulta => {
+    setSelectedConsulta(consulta)
+    setIsConfirmPopupOpen(true)
+  }
+
+  const confirmCancel = () => {
+    alert(`Reserva de ${selectedConsulta.user} cancelada com sucesso.`)
+    setIsConfirmPopupOpen(false)
+    setSelectedConsulta(null)
+  }
+
+  const closeConfirmPopup = () => {
+    setIsConfirmPopupOpen(false)
+    setSelectedConsulta(null)
   }
 
   return (
-    <div className="reserve-container">
-      <h1>Reserve</h1>
-      <h2>Quadra</h2>
-      <div className="dates">
-        {['25/08', '26/08', '27/08', '28/08', '29/08', '30/08', '31/08'].map(
-          (date, index) => (
-            <button
-              key={index}
-              className={`date-button ${selectedDate === date ? 'active' : ''}`}
-              onClick={() => handleDateClick(date)}
-            >
-              {date}
-            </button>
-          )
-        )}
-      </div>
+    <div className="reserve-page">
+      <h1>Agendamento de Quadras</h1>
+
+      <h2>Horários</h2>
       <table>
         <thead>
           <tr>
-            <th>Data</th>
-            <th>Valor</th>
-            <th>Piso</th>
-            <th>Cobertura</th>
-            <th>Ação</th>
+            <th>Horário</th>
+            <th>Segunda ({selectedDate.seg})</th>
+            <th>Terça ({selectedDate.ter})</th>
+            <th>Quarta ({selectedDate.qua})</th>
+            <th>Quinta ({selectedDate.qui})</th>
+            <th>Sexta ({selectedDate.sex})</th>
+            <th>Sábado ({selectedDate.sab})</th>
           </tr>
         </thead>
         <tbody>
-          {(reservasData[selectedDate] || []).map((reserva, index) => (
+          {horarios.map((horario, index) => (
             <tr key={index}>
-              <td>
-                {reserva.data} <br /> {reserva.quadra}
-              </td>
-              <td>{reserva.valor}</td>
-              <td>{reserva.piso}</td>
-              <td>{reserva.coberta}</td>
+              <td>{horario.time}</td>
+              {['seg', 'ter', 'qua', 'qui', 'sex', 'sab'].map((day, idx) => (
+                <td key={idx}>
+                  {horario[day] === 'Disponível' ? (
+                    <button
+                      className="available"
+                      onClick={() => handleAvailableClick(horario.time)}
+                    >
+                      {horario[day]}
+                    </button>
+                  ) : (
+                    <span className="unavailable">{horario[day]}</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>Consulta e Cancelamento</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>Data</th>
+            <th>Horário</th>
+            <th>Qtde Pessoas</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {consultas.map((consulta, index) => (
+            <tr key={index}>
+              <td>{consulta.user}</td>
+              <td>{consulta.data}</td>
+              <td>{consulta.horario}</td>
+              <td>{consulta.quantidade}</td>{' '}
+              {/* Adicionando a quantidade aqui */}
+              <td>{consulta.status}</td>
               <td>
                 <button
-                  className="reserve-button"
-                  onClick={() => handleReserveClick(reserva.quadra)}
+                  className="cancel-button"
+                  onClick={() => handleCancelClick(consulta)}
                 >
-                  RESERVAR
+                  Cancelar
                 </button>
               </td>
             </tr>
@@ -173,12 +228,55 @@ const Reserve = () => {
         </tbody>
       </table>
 
-      <ReservationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleModalSubmit}
-        quadra={selectedQuadra}
-      />
+      {isPopupOpen && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>
+              Reservar para {selectedTime} - {selectedDate.seg}
+            </h3>
+            <label>
+              Nome:
+              <input
+                type="text"
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+              />
+            </label>
+            <label>
+              Quantidade de pessoas:
+              <input
+                type="number"
+                value={quantidade}
+                onChange={e => setQuantidade(e.target.value)}
+              />
+            </label>
+            <label>
+              Telefone:
+              <input
+                type="tel"
+                value={telefone}
+                onChange={e => setTelefone(e.target.value)}
+              />
+            </label>
+            <button onClick={submitForm}>Enviar Reserva</button>
+            <button onClick={closePopup}>Fechar</button>
+          </div>
+        </div>
+      )}
+
+      {isConfirmPopupOpen && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Confirmar Cancelamento</h3>
+            <p>
+              Tem certeza que deseja cancelar a reserva de{' '}
+              {selectedConsulta?.user}?
+            </p>
+            <button onClick={confirmCancel}>Confirmar</button>
+            <button onClick={closeConfirmPopup}>Cancelar</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

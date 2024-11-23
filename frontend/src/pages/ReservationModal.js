@@ -1,4 +1,3 @@
-// src/components/ReservationModal.js
 import React, { useState } from 'react'
 import './ReservationModal.css' // Importar estilos do modal
 

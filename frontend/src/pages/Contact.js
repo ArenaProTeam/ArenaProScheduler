@@ -1,4 +1,3 @@
-// src/components/Contato.js
 import React, { useState } from 'react'
 import './Contact.css'
 

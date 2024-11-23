@@ -1,4 +1,3 @@
-// src/components/Home.js
 import React from 'react'
 import './Home.css'
 import raqueteImg from '../assets/raquete.png'
@@ -25,7 +24,9 @@ const Home = () => (
               <div className="hero-button">
                 <button
                   className="reserve-button"
-                  onClick={() => (window.location.href = '/reserva-online')}
+                  onClick={() =>
+                    (window.location.href = '/ArenaProScheduler/reserva-online')
+                  }
                 >
                   RESERVA ONLINE
                 </button>

@@ -1,18 +1,30 @@
-// src/components/Header.js
-import React from 'react'
-import { Link } from 'react-router-dom' // Importando o Link do react-router-dom
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Header.css'
 import logoImg from '../assets/logo-arenapro.png'
 
 const Header = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen)
+  }
+
   return (
     <header>
       <nav>
         <div className="nav-content">
           <div className="logo">
-            <img src={logoImg} alt="Logo" />
+            <Link to="/home">
+              <img src={logoImg} alt="Logo" />
+            </Link>
           </div>
-          <ul className="menu">
+          <div className="hamburger" onClick={toggleMenu}>
+            <div className="line"></div>
+            <div className="line"></div>
+            <div className="line"></div>
+          </div>
+          <ul className={`menu ${isMenuOpen ? 'active' : ''}`}>
             <li>
               <Link to="/home">Home</Link>
             </li>
@@ -26,7 +38,10 @@ const Header = () => {
               <Link to="/contato">Contato</Link>
             </li>
             <li>
-              <Link to="/reserva-online">Reserva Online</Link>
+              <Link to="/reservas">Reservas</Link>
+            </li>
+            <li>
+              <Link to="../login">Entrar / Cadastre-se</Link>
             </li>
           </ul>
         </div>
