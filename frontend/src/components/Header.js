@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './Header.css'
 import logoImg from '../assets/logo-arenapro.png'
 
-const Header = () => {
+const Header = ({ isLoggedIn, onLogout }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -41,7 +41,11 @@ const Header = () => {
               <Link to="/reservas">Reservas</Link>
             </li>
             <li>
-              <Link to="../login">Entrar / Cadastre-se</Link>
+              {isLoggedIn ? (
+                <button onClick={onLogout}>Logout</button>
+              ) : (
+                <Link to="/login">Entrar / Cadastre-se</Link>
+              )}
             </li>
           </ul>
         </div>

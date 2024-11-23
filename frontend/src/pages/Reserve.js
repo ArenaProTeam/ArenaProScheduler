@@ -70,15 +70,13 @@ const Reserve = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
   const [selectedTime, setSelectedTime] = useState('')
-  const [selectedDate, setSelectedDate] = useState({})
+  const [selectedDate, setSelectedDate] = useState('') // Inicializa como string vazia
   const [selectedConsulta, setSelectedConsulta] = useState(null)
 
-  // Novos estados para o formulário
   const [nome, setNome] = useState('')
   const [quantidade, setQuantidade] = useState('')
   const [telefone, setTelefone] = useState('')
 
-  // Função para calcular a próxima data
   const getNextDate = dayOffset => {
     const today = new Date()
     const nextDate = new Date(today)
@@ -86,8 +84,10 @@ const Reserve = () => {
     return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
   }
 
+  const [nextDates, setNextDates] = useState({})
+
   useEffect(() => {
-    const nextDates = {
+    const dates = {
       seg: getNextDate(1 - new Date().getDay()),
       ter: getNextDate(2 - new Date().getDay()),
       qua: getNextDate(3 - new Date().getDay()),
@@ -95,17 +95,17 @@ const Reserve = () => {
       sex: getNextDate(5 - new Date().getDay()),
       sab: getNextDate(6 - new Date().getDay())
     }
-    setSelectedDate(nextDates)
+    setNextDates(dates)
   }, [])
 
-  const handleAvailableClick = time => {
+  const handleAvailableClick = (time, day) => {
     setSelectedTime(time)
+    setSelectedDate(nextDates[day]) // Atualiza a seleção de data com a data correta
     setIsPopupOpen(true)
   }
 
   const closePopup = () => {
     setIsPopupOpen(false)
-    // Limpar os campos do formulário ao fechar
     setNome('')
     setQuantidade('')
     setTelefone('')
@@ -121,20 +121,14 @@ const Reserve = () => {
       `Reserva realizada com sucesso para ${nome}, ${quantidade} pessoas, telefone: ${telefone}.`
     )
 
-    // Adiciona nova consulta
     consultas.push({
       user: nome,
       horario: selectedTime,
-      data: new Date().toLocaleDateString('pt-BR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }),
+      data: selectedDate, // Usa a data selecionada
       quantidade: parseInt(quantidade),
       status: 'Pendente'
     })
 
-    // Fechar o popup e limpar os campos
     closePopup()
   }
 
@@ -163,12 +157,12 @@ const Reserve = () => {
         <thead>
           <tr>
             <th>Horário</th>
-            <th>Segunda ({selectedDate.seg})</th>
-            <th>Terça ({selectedDate.ter})</th>
-            <th>Quarta ({selectedDate.qua})</th>
-            <th>Quinta ({selectedDate.qui})</th>
-            <th>Sexta ({selectedDate.sex})</th>
-            <th>Sábado ({selectedDate.sab})</th>
+            <th>Segunda ({nextDates.seg})</th>
+            <th>Terça ({nextDates.ter})</th>
+            <th>Quarta ({nextDates.qua})</th>
+            <th>Quinta ({nextDates.qui})</th>
+            <th>Sexta ({nextDates.sex})</th>
+            <th>Sábado ({nextDates.sab})</th>
           </tr>
         </thead>
         <tbody>
@@ -180,7 +174,7 @@ const Reserve = () => {
                   {horario[day] === 'Disponível' ? (
                     <button
                       className="available"
-                      onClick={() => handleAvailableClick(horario.time)}
+                      onClick={() => handleAvailableClick(horario.time, day)}
                     >
                       {horario[day]}
                     </button>
@@ -212,8 +206,7 @@ const Reserve = () => {
               <td>{consulta.user}</td>
               <td>{consulta.data}</td>
               <td>{consulta.horario}</td>
-              <td>{consulta.quantidade}</td>{' '}
-              {/* Adicionando a quantidade aqui */}
+              <td>{consulta.quantidade}</td>
               <td>{consulta.status}</td>
               <td>
                 <button
@@ -232,7 +225,8 @@ const Reserve = () => {
         <div className="popup">
           <div className="popup-content">
             <h3>
-              Reservar para {selectedTime} - {selectedDate.seg}
+              Reservar para {selectedTime} - {selectedDate}{' '}
+              {/* Exibe a data correta */}
             </h3>
             <label>
               Nome:
