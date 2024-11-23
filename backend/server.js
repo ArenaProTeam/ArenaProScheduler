@@ -1,27 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
-require('dotenv').config();
+
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Alterado para 3000 conforme seu código
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Middleware
 app.use(express.json());
+app.use(cors());
 
-// URL de conexão com o MongoDB
-const mongoURI = 'mongodb://localhost:27017/ArenaProDB'; // substituído para o nome correto do banco de dados
+// Rotas principais (adicionar mais conforme necessário)
+app.use('/auth', require('./routes/auth'));
+app.use('/reservations', require('./routes/reservations'));
 
-// Conexão com o banco de dados
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Conectado ao MongoDB com sucesso!'))
+// Conexão ao MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Conectado ao MongoDB'))
   .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
-// Importar rotas
-const arenaRoutes = require('./routes/arenaRoutes');
-app.use('/api/arenas', arenaRoutes); // Usar rotas da arena
-
 // Iniciar o servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
