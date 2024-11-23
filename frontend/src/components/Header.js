@@ -42,9 +42,11 @@ const Header = ({ isLoggedIn, onLogout }) => {
             </li>
             <li>
               {isLoggedIn ? (
-                <button onClick={onLogout}>Logout</button>
+                <Link to="/login" onClick={onLogout}>
+                  Logout
+                </Link>
               ) : (
-                <Link to="/login">Entrar / Cadastre-se</Link>
+                <Link to="/login">Entrar / Cadastrar-se</Link>
               )}
             </li>
           </ul>

@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
 import './Login.css'
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState('login')
 
   const handleTabChange = tab => {
     setActiveTab(tab)
+  }
+
+  const handleLoginSubmit = event => {
+    event.preventDefault()
+    // Aqui você deve adicionar a lógica de autenticação
+    // Se a autenticação for bem-sucedida, chame onLogin
+    onLogin() // Chama a função para atualizar o estado de login
   }
 
   return (
@@ -29,7 +36,7 @@ const Login = () => {
         {activeTab === 'login' && (
           <li className="active">
             <div className="content__wrapper">
-              <form method="POST" action="">
+              <form onSubmit={handleLoginSubmit}>
                 <input type="email" name="email" placeholder="email" required />
                 <input
                   type="password"
