@@ -1,29 +1,28 @@
-import React from 'react'
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation
-} from 'react-router-dom'
-import Header from './components/Header'
-import Home from './pages/Home'
-import About from './pages/About'
-import Structure from './pages/Structure'
-import Contact from './pages/Contact'
-import Reserve from './pages/Reserve'
-import Login from './components/Login'
-import Footer from './components/Footer'
+  useLocation,
+} from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/Home';
+import About from './pages/About';
+import Structure from './pages/Structure';
+import Contact from './pages/Contact';
+import Reserve from './pages/Reserve';
+import Login from './components/Login';
+import Footer from './components/Footer';
 
 const AppContent = () => {
-  const location = useLocation() // Obtendo a localização atual
+  const location = useLocation(); // Current location
 
-  // Verifica se a rota atual é a de login
-  const isLoginPage = location.pathname === '/login'
+  // Check if the current route is the login page
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <>
-      {!isLoginPage && <Header />}{' '}
-      {/* Renderiza o Header apenas se não for a página de login */}
+      <Header />
       <div className="content-container">
         <main>
           <Routes>
@@ -32,22 +31,26 @@ const AppContent = () => {
             <Route path="/estrutura" element={<Structure />} />
             <Route path="/contato" element={<Contact />} />
             <Route path="/reservas" element={<Reserve />} />
-            <Route path="/login" element={<Login />} /> {/* Rota para Login */}
-            <Route path="/" element={<Home />} /> {/* Rota padrão */}
+            <Route path="/login" element={<Login />} /> {/* Login route */}
+            <Route path="/" element={<Home />} /> {/* Default route */}
           </Routes>
         </main>
       </div>
-      {!isLoginPage && <Footer />}{' '}
-      {/* Renderiza o Footer apenas se não for a página de login */}
+      {!isLoginPage && <Footer />}
+      {/* Render Footer only if not on the login page */}
     </>
-  )
-}
+  );
+};
 
-// Encapsulamento do AppContent em Router
 const App = () => (
-  <Router basename="/ArenaProScheduler">
+  <Router
+    future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    }}
+  >
     <AppContent />
   </Router>
-)
+);
 
-export default App
+export default App;
