@@ -22,8 +22,7 @@ const AppContent = () => {
 
   return (
     <>
-      {!isLoginPage && <Header />}{' '}
-      {/* Renderiza o Header apenas se não for a página de login */}
+      <Header />
       <div className="content-container">
         <main>
           <Routes>
