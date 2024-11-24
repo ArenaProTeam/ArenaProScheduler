@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 // Cadastro
@@ -7,17 +6,29 @@ const registerUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Validar entrada
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+    }
+
+    // Verificar se o usuário já existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Usuário já cadastrado.' });
     }
 
-    const user = new User({ email, password });
+    // Criptografar a senha
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Criar o usuário
+    const user = new User({ email, password: hashedPassword });
     await user.save();
 
+    // Resposta de sucesso
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao cadastrar usuário.' });
+    console.error('Erro ao cadastrar usuário:', error.message);
+    res.status(500).json({ error: 'Erro interno ao cadastrar usuário.' });
   }
 };
 
@@ -26,20 +37,28 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Validar entrada
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+    }
+
+    // Verificar se o usuário existe
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: 'Usuário não encontrado.' });
     }
 
+    // Verificar a senha
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Credenciais inválidas.' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
+    // Resposta de sucesso (sem necessidade de headers especiais)
+    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email });
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao fazer login.' });
+    console.error('Erro ao fazer login:', error.message);
+    res.status(500).json({ error: 'Erro interno ao fazer login.' });
   }
 };
 

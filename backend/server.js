@@ -9,12 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json());
-app.use(cors());
+app.use(express.json()); // Permite processar JSON automaticamente
+app.use(cors()); // Permite chamadas de qualquer origem
 
 // Rotas
-app.use('/auth', require('./routes/auth'));
-app.use('/reservations', require('./routes/reservations'));
+app.use('/auth', require('./routes/auth')); // Rotas de autenticação
 
 // Conexão ao MongoDB
 mongoose
@@ -22,15 +21,15 @@ mongoose
   .then(() => console.log('Conectado ao MongoDB'))
   .catch((err) => {
     console.error('Erro ao conectar ao MongoDB:', err.message);
-    process.exit(1); // Finaliza o processo em caso de erro
+    process.exit(1);
   });
 
 // Rota inicial
 app.get('/', (req, res) => {
-  res.send('Bem-vindo à API de Reservas!');
+  res.send('Bem-vindo à API de autenticação!');
 });
 
-// Inicialização do servidor
+// Inicializar o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
