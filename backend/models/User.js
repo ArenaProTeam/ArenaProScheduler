@@ -10,11 +10,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true, // Senha obrigatória
-  },
-  username: {
-    type: String, // Campo opcional para nome de usuário
-    default: null, // Valor padrão para evitar undefined
-  },
+  }
+  
 });
 
 // Hash da senha antes de salvar no banco

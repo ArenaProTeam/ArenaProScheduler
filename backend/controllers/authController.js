@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs');
 
 // Cadastro
 const registerUser = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Validação básica
-    if (!email || !password || !username) {
-      return res.status(400).json({ error: 'Email, senha e nome de usuário são obrigatórios.' });
+    if (!email || !password ) {
+      return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
 
     // Verificar se o email já existe
@@ -17,17 +17,11 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ error: 'Usuário já cadastrado.' });
     }
 
-    // Verificar se o username já existe
-    const existingUsername = await User.findOne({ username });
-    if (existingUsername) {
-      return res.status(400).json({ error: 'Nome de usuário já em uso.' });
-    }
-
     // Criptografar a senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Criar o usuário
-    const user = new User({ email, password: hashedPassword, username });
+    const user = new User({ email, password: hashedPassword});
     await user.save();
 
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
@@ -60,7 +54,7 @@ const loginUser = async (req, res) => {
     }
 
     // Resposta de sucesso
-    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email, username: user.username });
+    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email });
   } catch (error) {
     console.error('Erro ao fazer login:', error.message);
     res.status(500).json({ error: 'Erro interno ao fazer login.' });
