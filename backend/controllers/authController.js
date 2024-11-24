@@ -54,10 +54,13 @@ const loginUser = async (req, res) => {
     }
 
     // Resposta de sucesso
-    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email });
+    res.status(200).json({
+      message: 'Login bem-sucedido!',
+      email: user.email,
+    });
   } catch (error) {
     console.error('Erro ao fazer login:', error.message);
-    res.status(500).json({ error: 'Erro interno ao fazer login.', details: error.message });
+    res.status(500).json({ error: 'Erro ao fazer login.', details: error.message });
   }
 };
 
