@@ -1,7 +1,6 @@
-// controllers/reservationController.js
 const Reservation = require('../models/Reservation');
 
-// Reservar
+// Criar uma reserva
 const createReservation = async (req, res) => {
   const { userId, arena, date } = req.body;
 
@@ -20,7 +19,7 @@ const createReservation = async (req, res) => {
   }
 };
 
-// Cancelar Reserva
+// Cancelar uma reserva
 const cancelReservation = async (req, res) => {
   const { id } = req.params;
 

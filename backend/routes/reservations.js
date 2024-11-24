@@ -1,9 +1,8 @@
-// routes/reservations.js
 const express = require('express');
 const { createReservation, cancelReservation } = require('../controllers/reservationController');
 const router = express.Router();
 
-router.post('/', createReservation);
-router.delete('/:id', cancelReservation);
+router.post('/', createReservation); // Criar reserva
+router.delete('/:id', cancelReservation); // Cancelar reserva
 
 module.exports = router;
