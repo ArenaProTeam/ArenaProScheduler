@@ -44,16 +44,19 @@ const loginUser = async (req, res) => {
     // Verificar se o usuário existe
     const user = await User.findOne({ email });
     if (!user) {
+      console.error(`Usuário não encontrado para o email: ${email}`);
       return res.status(404).json({ error: 'Usuário não encontrado.' });
     }
 
     // Verificar a senha
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.error(`Senha incorreta para o email: ${email}`);
       return res.status(400).json({ error: 'Credenciais inválidas.' });
     }
 
     // Resposta de sucesso
+    console.log(`Login bem-sucedido para o email: ${email}`);
     res.status(200).json({
       message: 'Login bem-sucedido!',
       email: user.email,
