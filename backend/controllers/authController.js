@@ -19,6 +19,8 @@ const registerUser = async (req, res) => {
 
     // Criptografar a senha
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(`Senha recebida: ${password}`);
+    console.log(`Hash gerado: ${hashedPassword}`);
 
     // Criar o usuário
     const user = new User({ email, password: hashedPassword });
@@ -49,14 +51,17 @@ const loginUser = async (req, res) => {
     }
 
     // Verificar a senha
+    console.log(`Senha fornecida: ${password}`);
+    console.log(`Hash armazenado: ${user.password}`);
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(`Resultado da comparação: ${isMatch}`);
+
     if (!isMatch) {
       console.error(`Senha incorreta para o email: ${email}`);
       return res.status(400).json({ error: 'Credenciais inválidas.' });
     }
 
     // Resposta de sucesso
-    console.log(`Login bem-sucedido para o email: ${email}`);
     res.status(200).json({
       message: 'Login bem-sucedido!',
       email: user.email,
