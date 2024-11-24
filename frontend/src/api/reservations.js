@@ -1,5 +1,5 @@
-import axios from "axios";
-import API_BASE_URL from "../apiConfig";
+import axios from 'axios';
+import API_BASE_URL from './apiConfig';
 
 // Criar uma reserva
 export const createReservation = async (token, userId, arena, date) => {
@@ -24,5 +24,11 @@ export const getUserReservations = async (token, userId) => {
   const response = await axios.get(`${API_BASE_URL}/reservations/user/${userId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+  return response.data;
+};
+
+// Obter reservas ativas
+export const getActiveReservations = async () => {
+  const response = await axios.get(`${API_BASE_URL}/reservations/active`);
   return response.data;
 };
