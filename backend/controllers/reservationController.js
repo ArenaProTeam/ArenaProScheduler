@@ -1,4 +1,4 @@
-const Reservation = require('../models/Reservation');
+const Reservation = require('../models/reservation');
 
 // Criar uma reserva
 const createReservation = async (req, res) => {
