@@ -3,28 +3,33 @@ const bcrypt = require('bcryptjs');
 
 // Cadastro
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
-    // Validar entrada
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+    // Validação básica
+    if (!email || !password || !username) {
+      return res.status(400).json({ error: 'Email, senha e nome de usuário são obrigatórios.' });
     }
 
-    // Verificar se o usuário já existe
+    // Verificar se o email já existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Usuário já cadastrado.' });
+    }
+
+    // Verificar se o username já existe
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ error: 'Nome de usuário já em uso.' });
     }
 
     // Criptografar a senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Criar o usuário
-    const user = new User({ email, password: hashedPassword });
+    const user = new User({ email, password: hashedPassword, username });
     await user.save();
 
-    // Resposta de sucesso
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
   } catch (error) {
     console.error('Erro ao cadastrar usuário:', error.message);
@@ -37,7 +42,7 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Validar entrada
+    // Validação básica
     if (!email || !password) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
@@ -54,8 +59,8 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ error: 'Credenciais inválidas.' });
     }
 
-    // Resposta de sucesso (sem necessidade de headers especiais)
-    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email });
+    // Resposta de sucesso
+    res.status(200).json({ message: 'Login bem-sucedido!', email: user.email, username: user.username });
   } catch (error) {
     console.error('Erro ao fazer login:', error.message);
     res.status(500).json({ error: 'Erro interno ao fazer login.' });
