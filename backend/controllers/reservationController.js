@@ -1,47 +1,39 @@
-const Reservation = require('../models/reservation');
+// controllers/reservationController.js
+const Reservation = require('../models/Reservation');
 
-// Criar uma reserva
+// Reservar
 const createReservation = async (req, res) => {
   const { userId, arena, date } = req.body;
 
   try {
+    const existingReservation = await Reservation.findOne({ arena, date });
+    if (existingReservation) {
+      return res.status(400).json({ error: 'Horário já reservado.' });
+    }
+
     const reservation = new Reservation({ userId, arena, date });
     await reservation.save();
+
     res.status(201).json({ message: 'Reserva criada com sucesso!' });
   } catch (error) {
-    console.error('Erro ao criar reserva:', error);
-    res.status(400).json({ error: 'Erro ao criar reserva.', details: error.message });
+    res.status(500).json({ error: 'Erro ao criar reserva.' });
   }
 };
 
-// Obter todas as reservas de um usuário
-const getReservations = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const reservations = await Reservation.find({ userId });
-    res.status(200).json(reservations);
-  } catch (error) {
-    console.error('Erro ao obter reservas:', error);
-    res.status(400).json({ error: 'Erro ao obter reservas.', details: error.message });
-  }
-};
-
-// Obter uma reserva específica por ID
-const getReservationById = async (req, res) => {
+// Cancelar Reserva
+const cancelReservation = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const reservation = await Reservation.findById(id);
+    const reservation = await Reservation.findByIdAndDelete(id);
     if (!reservation) {
       return res.status(404).json({ error: 'Reserva não encontrada.' });
     }
 
-    res.status(200).json(reservation);
+    res.status(200).json({ message: 'Reserva cancelada com sucesso!' });
   } catch (error) {
-    console.error('Erro ao obter a reserva:', error);
-    res.status(500).json({ error: 'Erro no servidor ao obter a reserva.', details: error.message });
+    res.status(500).json({ error: 'Erro ao cancelar reserva.' });
   }
 };
 
-module.exports = { createReservation, getReservations, getReservationById };
+module.exports = { createReservation, cancelReservation };
