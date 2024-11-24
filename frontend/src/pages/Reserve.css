@@ -11,6 +11,7 @@ body {
 
 h1 {
   margin-top: 20px;
+  text-align: center;
 }
 
 h2 {
@@ -34,17 +35,29 @@ th, td {
   text-align: center; /* Centraliza o texto */
   overflow: hidden; /* Oculta o texto que excede a largura da célula */
   white-space: nowrap; /* Evita quebras de linha dentro das células */
+  color: #333;  
+}
+
+td {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 th {
   background-color: #f2f2f2; /* Cor de fundo para cabeçalhos */
 }
 
+button {
+  width: 100px;
+  height: 35px;
+  font-size: 15px;
+  padding: 0;
+ }
+
 .available {
   background-color: green;
   color: white;
   border: none;
-  padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -87,7 +100,7 @@ th {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 350px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -107,7 +120,6 @@ th {
 .popup-content button {
   margin-top: 15px;
   margin-right: 5px;
-  padding: 10px;
   background-color: green;
   color: white;
   border: none;
