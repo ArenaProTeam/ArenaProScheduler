@@ -5,19 +5,17 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // Email único
+    unique: true, // Garante que o email seja único
   },
   password: {
     type: String,
-    required: true, // Senha obrigatória
-  }
-  
+    required: true, // Campo obrigatório
+  },
 });
 
-// Hash da senha antes de salvar no banco
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); // Apenas re-hash se a senha foi modificada
-  this.password = await bcrypt.hash(this.password, 10); // Criptografa a senha com bcrypt
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10); // Criptografa a senha antes de salvar
   next();
 });
 
