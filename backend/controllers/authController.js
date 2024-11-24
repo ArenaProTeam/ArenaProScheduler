@@ -7,7 +7,7 @@ const registerUser = async (req, res) => {
 
   try {
     // Validação básica
-    if (!email || !password ) {
+    if (!email || !password) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
 
@@ -21,7 +21,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Criar o usuário
-    const user = new User({ email, password: hashedPassword});
+    const user = new User({ email, password: hashedPassword });
     await user.save();
 
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
