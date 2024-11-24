@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const reservationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+const ReservationSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   arena: { type: String, required: true },
-  date: { type: Date, required: true },
-  status: { type: String, default: 'active' }, // status padrão
+  date: { type: String, required: true }, // formato dd/mm
+  time: { type: String, required: true }, // Ex: "07:40 - 08:30"
 });
 
-module.exports = mongoose.model('Reservation', reservationSchema);
+module.exports = mongoose.model('Reservation', ReservationSchema);
