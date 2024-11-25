@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Reserve.css';
-import API_BASE_URL from '../api/apiConfig'; // URL base para o backend
+import API_BASE_URL from '../api/apiConfig';
 
 const Reserve = ({ isLoggedIn }) => {
   const navigate = useNavigate();
@@ -51,15 +51,19 @@ const Reserve = ({ isLoggedIn }) => {
 
         setHorarios((prevHorarios) =>
           prevHorarios.map((horario) => {
-            reservations.forEach((reservation) => {
-              if (horario.time === reservation.time && reservation.date === selectedDate) {
-                const day = Object.keys(nextDates).find(
-                  (key) => nextDates[key] === reservation.date
-                );
-                if (day) horario[day] = false;
-              }
+            const updatedHorario = { ...horario };
+            Object.keys(nextDates).forEach((day) => {
+              const dateForDay = nextDates[day];
+              reservations.forEach((reservation) => {
+                if (
+                  reservation.time === horario.time &&
+                  reservation.date === dateForDay
+                ) {
+                  updatedHorario[day] = false; // Marca como indisponível
+                }
+              });
             });
-            return horario;
+            return updatedHorario;
           })
         );
       } catch (error) {
@@ -70,7 +74,7 @@ const Reserve = ({ isLoggedIn }) => {
     if (Object.keys(nextDates).length > 0) {
       fetchReservations();
     }
-  }, [nextDates, selectedDate]);
+  }, [nextDates]);
 
   // Submeter a reserva
   const submitForm = async () => {
