@@ -42,6 +42,36 @@ const Reserve = ({ isLoggedIn }) => {
     setNextDates(dates);
   }, []);
 
+  // Atualizar estado de horários com base nas reservas ativas
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/reservations/active`);
+        const reservations = await response.json();
+
+        setHorarios((prevHorarios) =>
+          prevHorarios.map((horario) => {
+            reservations.forEach((reservation) => {
+              if (horario.time === reservation.time && reservation.date === selectedDate) {
+                const day = Object.keys(nextDates).find(
+                  (key) => nextDates[key] === reservation.date
+                );
+                if (day) horario[day] = false;
+              }
+            });
+            return horario;
+          })
+        );
+      } catch (error) {
+        console.error('Erro ao buscar reservas ativas:', error.message);
+      }
+    };
+
+    if (Object.keys(nextDates).length > 0) {
+      fetchReservations();
+    }
+  }, [nextDates, selectedDate]);
+
   // Submeter a reserva
   const submitForm = async () => {
     const { nome, quantidade, telefone } = formData;
@@ -56,7 +86,6 @@ const Reserve = ({ isLoggedIn }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: localStorage.getItem('userId'),
           arena: 'Arena A',
           date: selectedDate,
           time: selectedTime,

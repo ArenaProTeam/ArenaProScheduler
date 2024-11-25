@@ -22,6 +22,7 @@ mongoose
   });
 
 // Rotas
+app.use('/auth', require('./routes/auth'));
 app.use('/reservations', require('./routes/reservations'));
 
 // Inicialização do servidor
