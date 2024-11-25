@@ -1,40 +1,18 @@
 import React, { useState } from 'react'
-import { loginUser, registerUser } from '../api/auth'
 import './Login.css'
 
 const Login = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState('login')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState(null)
 
-  const handleTabChange = tab => setActiveTab(tab)
-
-  const handleLoginSubmit = async e => {
-    e.preventDefault()
-    try {
-      const data = await loginUser(email, password)
-      localStorage.setItem('token', data.token)
-      onLogin(data.token) // Passa o token para o estado principal
-    } catch (err) {
-      setError('Erro ao fazer login.')
-    }
+  const handleTabChange = tab => {
+    setActiveTab(tab)
   }
 
-  const handleRegisterSubmit = async e => {
-    e.preventDefault()
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem.')
-
-      return
-    }
-    try {
-      await registerUser(email, password)
-      setActiveTab('login')
-    } catch (err) {
-      setError('Erro ao registrar usuário.')
-    }
+  const handleLoginSubmit = event => {
+    event.preventDefault()
+    // Aqui você deve adicionar a lógica de autenticação
+    // Se a autenticação for bem-sucedida, chame onLogin
+    onLogin() // Chama a função para atualizar o estado de login
   }
 
   return (
@@ -54,54 +32,53 @@ const Login = ({ onLogin }) => {
         </li>
       </ul>
 
-      {activeTab === 'login' && (
-        <form onSubmit={handleLoginSubmit}>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Senha"
-            required
-          />
-          <button type="submit">Login</button>
-        </form>
-      )}
+      <ul className="tab__content">
+        {activeTab === 'login' && (
+          <li className="active">
+            <div className="content__wrapper">
+              <form onSubmit={handleLoginSubmit}>
+                <input type="email" name="email" placeholder="email" required />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                />
+                <input type="submit" value="Login" name="login" />
+              </form>
+            </div>
+          </li>
+        )}
 
-      {activeTab === 'register' && (
-        <form onSubmit={handleRegisterSubmit}>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Senha"
-            required
-          />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            placeholder="Confirmar Senha"
-            required
-          />
-          <button type="submit">Registrar</button>
-        </form>
-      )}
-
-      {error && <p className="error">{error}</p>}
+        {activeTab === 'register' && (
+          <li>
+            <div className="content__wrapper">
+              <form method="POST" action="">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Username"
+                  required
+                />
+                <input type="email" name="email" placeholder="email" required />
+                <input
+                  type="password"
+                  name="pass"
+                  placeholder="Password"
+                  required
+                />
+                <input
+                  type="password"
+                  name="repass"
+                  placeholder="Repeat-Password"
+                  required
+                />
+                <input type="submit" value="Register" name="register" />
+              </form>
+            </div>
+          </li>
+        )}
+      </ul>
     </section>
   )
 }

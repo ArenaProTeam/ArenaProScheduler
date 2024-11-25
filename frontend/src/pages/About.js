@@ -33,12 +33,7 @@ const About = () => {
         encontram na areia!
       </p>
 
-      <button
-        className="reserve-button"
-        onClick={() => (window.location.href = '/reservas')}
-      >
-        RESERVA ONLINE
-      </button>
+      <button className="reserve-button">RESERVA ONLINE</button>
     </div>
   )
 }

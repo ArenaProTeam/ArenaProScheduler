@@ -24,7 +24,9 @@ const Home = () => (
               <div className="hero-button">
                 <button
                   className="reserve-button"
-                  onClick={() => (window.location.href = '/reservas')}
+                  onClick={() =>
+                    (window.location.href = '/ArenaProScheduler/reserva-online')
+                  }
                 >
                   RESERVA ONLINE
                 </button>
