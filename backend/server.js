@@ -12,9 +12,6 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-// Rotas
-app.use('/auth', require('./routes/auth')); // Configuração da rota para autenticação
-
 // Conexão ao MongoDB
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -24,10 +21,8 @@ mongoose
     process.exit(1);
   });
 
-// Rota inicial
-app.get('/', (req, res) => {
-  res.send('Bem-vindo à API de autenticação!');
-});
+// Rotas
+app.use('/reservations', require('./routes/reservations'));
 
 // Inicialização do servidor
 app.listen(PORT, () => {
