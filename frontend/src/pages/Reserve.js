@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Reserve.css'
+import API_BASE_URL from '../api/apiConfig'
 
-const Reserve = ({ isLoggedIn }) => {
-  const navigate = useNavigate() // Instância de navegação
+const Reserve = ({ isLoggedIn, loginUser }) => {
+  const navigate = useNavigate()
 
   const initialHorarios = [
     {
-      time: '07:40 - 08:30',
+      time: '07:30 - 08:30',
       seg: true,
       ter: true,
       qua: true,
@@ -16,7 +17,7 @@ const Reserve = ({ isLoggedIn }) => {
       sab: true
     },
     {
-      time: '08:30 - 09:20',
+      time: '08:30 - 09:30',
       seg: true,
       ter: true,
       qua: true,
@@ -25,7 +26,7 @@ const Reserve = ({ isLoggedIn }) => {
       sab: true
     },
     {
-      time: '09:30 - 10:20',
+      time: '09:30 - 10:30',
       seg: true,
       ter: true,
       qua: true,
@@ -34,7 +35,7 @@ const Reserve = ({ isLoggedIn }) => {
       sab: true
     },
     {
-      time: '10:20 - 11:10',
+      time: '10:30 - 11:30',
       seg: true,
       ter: true,
       qua: true,
@@ -43,7 +44,7 @@ const Reserve = ({ isLoggedIn }) => {
       sab: true
     },
     {
-      time: '11:20 - 12:10',
+      time: '11:30 - 12:30',
       seg: true,
       ter: true,
       qua: true,
@@ -54,25 +55,25 @@ const Reserve = ({ isLoggedIn }) => {
   ]
 
   const [horarios, setHorarios] = useState(initialHorarios)
-  const [consultas, setConsultas] = useState([])
+  const [reservas, setReservas] = useState([])
   const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
   const [selectedTime, setSelectedTime] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
-  const [selectedConsulta, setSelectedConsulta] = useState(null)
   const [formData, setFormData] = useState({
     nome: '',
     quantidade: '',
     telefone: ''
   })
   const [nextDates, setNextDates] = useState({})
+  const [isConfirmCancelOpen, setIsConfirmCancelOpen] = useState(false)
+  const [selectedReservaId, setSelectedReservaId] = useState(null)
 
   useEffect(() => {
     const getNextDate = dayOffset => {
       const today = new Date()
       const nextDate = new Date(today)
       nextDate.setDate(today.getDate() + ((dayOffset + 7) % 7))
-      return `${nextDate.getDate()}/${nextDate.getMonth() + 1}` // Formato: dd/mm
+      return `${nextDate.getDate()}/${nextDate.getMonth() + 1}`
     }
 
     const dates = {
@@ -87,10 +88,130 @@ const Reserve = ({ isLoggedIn }) => {
     setNextDates(dates)
   }, [])
 
+  const fetchReservations = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/reservations/active`)
+      const reservations = await response.json()
+
+      // Adicione este console.log para ver as reservas retornadas
+      console.log('Reservas obtidas da API:', reservations)
+
+      // Filtrar reservas para o usuário logado
+      const userReservations = reservations.filter(
+        reservation => reservation.userId === loginUser // Certifique-se de que userId corresponde ao loginUser
+      )
+
+      console.log('Reservas do usuário:', userReservations) // Mostre as reservas filtradas
+
+      setReservas(userReservations)
+
+      // Atualizar horários com base nas reservas ativas
+      setHorarios(prevHorarios =>
+        prevHorarios.map(horario => {
+          const updatedHorario = { ...horario }
+          Object.keys(nextDates).forEach(day => {
+            const dateForDay = nextDates[day]
+            // Redefinir o estado como disponível inicialmente
+            updatedHorario[day] = true // Torna tudo disponível inicialmente
+            userReservations.forEach(reservation => {
+              if (
+                reservation.time === horario.time &&
+                reservation.date === dateForDay
+              ) {
+                updatedHorario[day] = false // Marca como indisponível
+              }
+            })
+          })
+          return updatedHorario
+        })
+      )
+    } catch (error) {
+      console.error('Erro ao buscar reservas ativas:', error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (Object.keys(nextDates).length > 0) {
+      fetchReservations()
+    }
+  }, [nextDates, loginUser]) // Usando loginUser como dependência
+
+  const submitForm = async () => {
+    const { nome, quantidade, telefone } = formData
+
+    if (!nome || !quantidade || !telefone) {
+      alert('Por favor, preencha todos os campos!')
+      return
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/reservations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          arena: 'Arena A',
+          date: selectedDate,
+          time: selectedTime,
+          nome,
+          quantidade,
+          telefone,
+          userId: loginUser // Enviar loginUser na reserva
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        alert(errorData.error || 'Erro ao realizar a reserva.')
+        return
+      }
+
+      const data = await response.json()
+      alert(data.message)
+      closePopup()
+      await fetchReservations() // Recarregar reservas após a criação
+      navigate('/reservas') // Navegar de volta para a página de reservas
+    } catch (error) {
+      console.error('Erro ao criar reserva:', error.message)
+      alert('Erro ao criar reserva. Tente novamente mais tarde.')
+    }
+  }
+
+  const confirmCancelReserva = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/reservations/${selectedReservaId}`,
+        {
+          method: 'DELETE'
+        }
+      )
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        alert(errorData.error || 'Erro ao cancelar a reserva.')
+        return
+      }
+
+      alert('Reserva cancelada com sucesso!')
+      await fetchReservations() // Recarregar reservas após cancelamento
+      navigate('/reservas') // Navegar de volta para a página de reservas
+    } catch (error) {
+      console.error('Erro ao cancelar reserva:', error.message)
+      alert('Erro ao cancelar reserva. Tente novamente mais tarde.')
+    } finally {
+      setIsConfirmCancelOpen(false)
+      setSelectedReservaId(null)
+    }
+  }
+
+  const handleCancelClick = id => {
+    setSelectedReservaId(id)
+    setIsConfirmCancelOpen(true)
+  }
+
   const handleAvailableClick = (time, day) => {
     if (!isLoggedIn) {
       alert('Você precisa estar logado para reservar!')
-      navigate('/login') // Redireciona para a tela de login
+      navigate('/login')
       return
     }
     setSelectedTime(time)
@@ -103,65 +224,6 @@ const Reserve = ({ isLoggedIn }) => {
     setFormData({ nome: '', quantidade: '', telefone: '' })
   }
 
-  const submitForm = () => {
-    const { nome, quantidade, telefone } = formData
-
-    if (!nome || !quantidade || !telefone) {
-      alert('Por favor, preencha todos os campos!')
-      return
-    }
-
-    const newConsulta = {
-      user: nome,
-      horario: selectedTime,
-      data: selectedDate,
-      quantidade: parseInt(quantidade)
-    }
-
-    setConsultas(prevConsultas => [...prevConsultas, newConsulta])
-
-    // Atualiza os horários para marcar como indisponível
-    setHorarios(prevHorarios =>
-      prevHorarios.map(horario => {
-        if (horario.time === selectedTime) {
-          return {
-            ...horario,
-            [Object.keys(nextDates).find(
-              day => nextDates[day] === selectedDate
-            )]: false
-          }
-        }
-        return horario
-      })
-    )
-
-    alert(
-      `Reserva realizada com sucesso para ${nome}, ${quantidade} pessoas, telefone: ${telefone}.`
-    )
-    closePopup()
-  }
-
-  const handleCancelClick = consulta => {
-    setSelectedConsulta(consulta)
-    setIsConfirmPopupOpen(true)
-  }
-
-  const confirmCancel = () => {
-    setConsultas(prevConsultas =>
-      prevConsultas.filter(c => c !== selectedConsulta)
-    )
-    alert(`Reserva de ${selectedConsulta.user} cancelada com sucesso.`)
-    closeConfirmPopup()
-
-    // Redireciona para a tela de login após o cancelamento
-    navigate('/login')
-  }
-
-  const closeConfirmPopup = () => {
-    setIsConfirmPopupOpen(false)
-    setSelectedConsulta(null)
-  }
-
   const handleInputChange = e => {
     const { name, value } = e.target
     setFormData(prevData => ({ ...prevData, [name]: value }))
@@ -170,16 +232,17 @@ const Reserve = ({ isLoggedIn }) => {
   return (
     <div className="reserve-page">
       <h1>Agendamento de Quadras</h1>
-
       <h2>Horários</h2>
       <table>
         <thead>
           <tr>
             <th>Horário</th>
             {Object.keys(nextDates).map(day => (
-              <th key={day}>{`${day.charAt(0).toUpperCase() + day.slice(1)} (${
-                nextDates[day]
-              })`}</th>
+              <th key={day}>
+                {`${day.charAt(0).toUpperCase() + day.slice(1)} (${
+                  nextDates[day]
+                })`}
+              </th>
             ))}
           </tr>
         </thead>
@@ -191,7 +254,7 @@ const Reserve = ({ isLoggedIn }) => {
                 <td key={idx}>
                   {horario[day] ? (
                     <button
-                      className="available"
+                      className="available-button"
                       onClick={() => handleAvailableClick(horario.time, day)}
                     >
                       Disponível
@@ -206,34 +269,44 @@ const Reserve = ({ isLoggedIn }) => {
         </tbody>
       </table>
 
-      <h2>Consulta e Cancelamento</h2>
+      <h2>Minhas Reservas</h2>
       <table>
         <thead>
           <tr>
-            <th>Usuário</th>
+            <th>Nome</th>
             <th>Data</th>
             <th>Horário</th>
             <th>Qtde Pessoas</th>
-            <th>Ações</th>
+            <th>Ação</th>
           </tr>
         </thead>
         <tbody>
-          {consultas.map((consulta, index) => (
-            <tr key={index}>
-              <td>{consulta.user}</td>
-              <td>{consulta.data}</td>
-              <td>{consulta.horario}</td>
-              <td>{consulta.quantidade}</td>
-              <td>
-                <button
-                  className="cancel-button"
-                  onClick={() => handleCancelClick(consulta)}
-                >
-                  Cancelar
-                </button>
+          {reservas.length === 0 ? (
+            <tr>
+              <td colSpan="5" style={{ textAlign: 'center', height: 50 }}>
+                Você ainda não possui reservas.
               </td>
             </tr>
-          ))}
+          ) : (
+            reservas.map(reserva => (
+              <tr key={reserva._id}>
+                <td>
+                  <strong>{reserva.nome}</strong>
+                </td>
+                <td>{reserva.date}</td>
+                <td>{reserva.time}</td>
+                <td>{reserva.quantidade}</td>{' '}
+                <td>
+                  <button
+                    className="cancel-button"
+                    onClick={() => handleCancelClick(reserva._id)}
+                  >
+                    Cancelar
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
@@ -241,7 +314,7 @@ const Reserve = ({ isLoggedIn }) => {
         <div className="popup">
           <div className="popup-content">
             <h3>
-              Reservar para {selectedTime} - {selectedDate}
+              Reservar para: {selectedDate} {selectedTime}
             </h3>
             <label>
               Nome:
@@ -270,22 +343,30 @@ const Reserve = ({ isLoggedIn }) => {
                 onChange={handleInputChange}
               />
             </label>
-            <button onClick={submitForm}>Enviar Reserva</button>
-            <button onClick={closePopup}>Fechar</button>
+
+            <button className="popup-confirm" onClick={submitForm}>
+              Enviar
+            </button>
+            <button className="popup-cancel" onClick={closePopup}>
+              Voltar
+            </button>
           </div>
         </div>
       )}
 
-      {isConfirmPopupOpen && (
+      {isConfirmCancelOpen && (
         <div className="popup">
           <div className="popup-content">
-            <h3>Confirmar Cancelamento</h3>
-            <p>
-              Tem certeza que deseja cancelar a reserva de{' '}
-              {selectedConsulta?.user}?
-            </p>
-            <button onClick={confirmCancel}>Confirmar</button>
-            <button onClick={closeConfirmPopup}>Cancelar</button>
+            <h3>Você tem certeza que deseja cancelar esta reserva?</h3>
+            <button className="popup-confirm" onClick={confirmCancelReserva}>
+              Sim
+            </button>
+            <button
+              className="popup-cancel"
+              onClick={() => setIsConfirmCancelOpen(false)}
+            >
+              Voltar
+            </button>
           </div>
         </div>
       )}

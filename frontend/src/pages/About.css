@@ -1,3 +1,7 @@
+body {
+  color: #333;
+}
+
 .about-container {
   padding: 20px;
   max-width: 80%;
@@ -16,13 +20,13 @@
   line-height: 1.6;
 }
 
-.reserve-button {
+.about-container .reserve-button {
   display: block;
   margin: 50px auto;
   background-color: #191A23;
   color: white;
   border: none;
-  padding: 20px 30px;
+  padding: 15px 25px;
   cursor: pointer;
   text-align: center;
 }

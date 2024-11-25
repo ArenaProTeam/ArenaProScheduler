@@ -13,19 +13,19 @@ const Footer = () => (
           <h3>Menu</h3>
           <ul>
             <li>
-              <a href="#home">Home</a>
+              <a href="/home">Home</a>
             </li>
             <li>
-              <a href="#quem-somos">Quem Somos</a>
+              <a href="/quem-somos">Quem Somos</a>
             </li>
             <li>
-              <a href="#estrutura">Estrutura</a>
+              <a href="/estrutura">Estrutura</a>
             </li>
             <li>
-              <a href="#contato">Contato</a>
+              <a href="/contato">Contato</a>
             </li>
             <li>
-              <a href="#reserva-online">Reserva Online</a>
+              <a href="/reservas">Reserva Online</a>
             </li>
           </ul>
         </div>

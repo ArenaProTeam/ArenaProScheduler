@@ -66,6 +66,11 @@ input[type="password"]:focus {
   outline: none;
 }
 
+button {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
 input[type="submit"] {
   background-color: #8ee525;
   color: #fff;

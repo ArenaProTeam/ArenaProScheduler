@@ -29,7 +29,11 @@ body {
   line-height: 1.75;
 }
 
-.hero-text {
+.hero .hero-contents h1 {
+  text-align: left;
+}
+
+.hero .hero-text {
   max-width: 36%;
   text-align: left;
   color: #333;
@@ -122,14 +126,14 @@ body {
   transform: scaleX(1);
 }
 
-.hero-button {
-  margin-top: 0;
+.hero .hero-button {
+  margin-top: 13px;
   display: flex;
   justify-content: flex-start !important;
   width: 100%;
 }
 
-.reserve-button {
+.hero .reserve-button {
   background-color: #2C2C2C !important;
   color: white !important;
   padding: 15px 20px;
