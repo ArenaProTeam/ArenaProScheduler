@@ -15,6 +15,7 @@ const Reserve = ({ isLoggedIn }) => {
   ];
 
   const [horarios, setHorarios] = useState(initialHorarios);
+  const [reservas, setReservas] = useState([]); // Estado para armazenar reservas do usuário
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -49,6 +50,10 @@ const Reserve = ({ isLoggedIn }) => {
         const response = await fetch(`${API_BASE_URL}/reservations/active`);
         const reservations = await response.json();
 
+        // Atualizar estado das reservas
+        setReservas(reservations);
+
+        // Atualizar horários
         setHorarios((prevHorarios) =>
           prevHorarios.map((horario) => {
             const updatedHorario = { ...horario };
@@ -114,6 +119,27 @@ const Reserve = ({ isLoggedIn }) => {
     }
   };
 
+  // Cancelar reserva
+  const cancelarReserva = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/reservations/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || 'Erro ao cancelar a reserva.');
+        return;
+      }
+
+      alert('Reserva cancelada com sucesso!');
+      setReservas((prevReservas) => prevReservas.filter((reserva) => reserva._id !== id));
+    } catch (error) {
+      console.error('Erro ao cancelar reserva:', error.message);
+      alert('Erro ao cancelar reserva. Tente novamente mais tarde.');
+    }
+  };
+
   // Eventos do popup
   const handleAvailableClick = (time, day) => {
     if (!isLoggedIn) {
@@ -171,6 +197,17 @@ const Reserve = ({ isLoggedIn }) => {
           ))}
         </tbody>
       </table>
+
+      <h2>Minhas Reservas</h2>
+      <ul>
+        {reservas.map((reserva) => (
+          <li key={reserva._id}>
+            <strong>{reserva.nome}</strong> - {reserva.date} às {reserva.time}
+            <button onClick={() => cancelarReserva(reserva._id)}>Cancelar</button>
+          </li>
+        ))}
+      </ul>
+
       {isPopupOpen && (
         <div className="popup">
           <div className="popup-content">
