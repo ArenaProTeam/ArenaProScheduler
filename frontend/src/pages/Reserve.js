@@ -92,26 +92,17 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/reservations/active`)
       const reservations = await response.json()
-
-      // Adicione este console.log para ver as reservas retornadas
-      console.log('Reservas obtidas da API:', reservations)
-
-      // Filtrar reservas para o usuário logado
       const userReservations = reservations.filter(
-        reservation => reservation.userId === loginUser // Certifique-se de que userId corresponde ao loginUser
+        reservation => reservation.userId === loginUser
       )
-
-      console.log('Reservas do usuário:', userReservations) // Mostre as reservas filtradas
 
       setReservas(userReservations)
 
-      // Atualizar horários com base nas reservas ativas
       setHorarios(prevHorarios =>
         prevHorarios.map(horario => {
           const updatedHorario = { ...horario }
           Object.keys(nextDates).forEach(day => {
             const dateForDay = nextDates[day]
-            // Redefinir o estado como disponível inicialmente
             updatedHorario[day] = true // Torna tudo disponível inicialmente
             userReservations.forEach(reservation => {
               if (
@@ -134,15 +125,41 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
     if (Object.keys(nextDates).length > 0) {
       fetchReservations()
     }
-  }, [nextDates, loginUser]) // Usando loginUser como dependência
+  }, [nextDates, loginUser])
 
   const submitForm = async () => {
     const { nome, quantidade, telefone } = formData
 
+    // Verifica se os campos estão preenchidos
     if (!nome || !quantidade || !telefone) {
       alert('Por favor, preencha todos os campos!')
       return
     }
+
+    // Verifica se a quantidade está entre 1 e 12
+    const quantidadeNum = parseInt(quantidade, 10);
+    if (isNaN(quantidadeNum) || quantidadeNum < 1 || quantidadeNum > 12) {
+      alert('A quantidade de pessoas deve ser entre 1 e 12!')
+      return
+    }
+
+// Validação e formatação do telefone antes do envio
+const cleanedTelefone = formData.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+if (cleanedTelefone.length < 8 || cleanedTelefone.length > 11) {
+    alert('O telefone deve conter entre 8 e 11 dígitos!');
+    return;
+}
+
+// Formatação final
+let formattedTelefone = cleanedTelefone;
+if (cleanedTelefone.length === 11) {
+    formattedTelefone = `(${cleanedTelefone.substring(0, 2)}) ${cleanedTelefone.substring(2, 7)}-${cleanedTelefone.substring(7)}`;
+} else if (cleanedTelefone.length === 10) {
+    formattedTelefone = `(${cleanedTelefone.substring(0, 2)}) ${cleanedTelefone.substring(2, 6)}-${cleanedTelefone.substring(6)}`;
+} else if (cleanedTelefone.length >= 8) {
+    formattedTelefone = `${cleanedTelefone.substring(0, 4)}-${cleanedTelefone.substring(4)}`;
+}
 
     try {
       const response = await fetch(`${API_BASE_URL}/reservations`, {
@@ -153,9 +170,9 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
           date: selectedDate,
           time: selectedTime,
           nome,
-          quantidade,
-          telefone,
-          userId: loginUser // Enviar loginUser na reserva
+          quantidade: quantidadeNum,
+          telefone: formattedTelefone, // Use o telefone formatado
+          userId: loginUser
         })
       })
 
@@ -168,8 +185,8 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
       const data = await response.json()
       alert(data.message)
       closePopup()
-      await fetchReservations() // Recarregar reservas após a criação
-      navigate('/reservas') // Navegar de volta para a página de reservas
+      await fetchReservations()
+      navigate('/reservas')
     } catch (error) {
       console.error('Erro ao criar reserva:', error.message)
       alert('Erro ao criar reserva. Tente novamente mais tarde.')
@@ -192,8 +209,8 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
       }
 
       alert('Reserva cancelada com sucesso!')
-      await fetchReservations() // Recarregar reservas após cancelamento
-      navigate('/reservas') // Navegar de volta para a página de reservas
+      await fetchReservations()
+      navigate('/reservas')
     } catch (error) {
       console.error('Erro ao cancelar reserva:', error.message)
       alert('Erro ao cancelar reserva. Tente novamente mais tarde.')
@@ -226,8 +243,35 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
 
   const handleInputChange = e => {
     const { name, value } = e.target
-    setFormData(prevData => ({ ...prevData, [name]: value }))
+
+    if (name === 'quantidade') {
+      const quantidadeNum = parseInt(value, 10);
+      if (!isNaN(quantidadeNum) && quantidadeNum >= 1 && quantidadeNum <= 12) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: quantidadeNum.toString()
+        }));
+      } else {
+        alert('A quantidade de pessoas deve ser entre 1 e 12!');
+      }
+    } else if (name === 'telefone') {
+      const cleaned = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+      let formatted = cleaned;
+  
+     if (cleaned.length > 6 && cleaned.length <= 10) {
+          // Formata (XX) XXXX-XXXX
+          formatted = `(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 6)}-${cleaned.substring(6)}`;
+      } else if (cleaned.length === 11) {
+          // Formata (XX) XXXXX-XXXX
+          formatted = `(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 7)}-${cleaned.substring(7)}`;
+      }
+  
+      setFormData((prevData) => ({ ...prevData, [name]: formatted }));
+  } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
   }
+   
+}
 
   return (
     <div className="reserve-page">
@@ -295,7 +339,7 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
                 </td>
                 <td>{reserva.date}</td>
                 <td>{reserva.time}</td>
-                <td>{reserva.quantidade}</td>{' '}
+                <td>{reserva.quantidade}</td>
                 <td>
                   <button
                     className="cancel-button"
@@ -332,6 +376,7 @@ const Reserve = ({ isLoggedIn, loginUser }) => {
                 name="quantidade"
                 value={formData.quantidade}
                 onChange={handleInputChange}
+                required
               />
             </label>
             <label>
