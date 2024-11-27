@@ -10,16 +10,16 @@ Plataforma para agendamento de quadras de areia.
 
 ## Estrutura do Projeto
 ```plaintext
-beach-arena-scheduler/
+ArenaProScheduler/
 ├── backend/
 │   ├── config/
-│       └── db.js
+│   │   └── db.js
 │   ├── controllers/
-│       └── arenaController.js
+│   │   └── arenaController.js
 │   ├── models/
-│       └── Arena.js
+│   │   └── Arena.js
 │   ├── routes/
-│       └── arenaRoutes.js
+│   │   └── arenaRoutes.js
 │   ├── .env
 │   └── server.js
 ├── frontend/
@@ -35,8 +35,17 @@ beach-arena-scheduler/
 │       │   └── ReservationModal.js
 │       ├── App.js
 │       └── index.js
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── scripts.js
+│   └── images/
+│       └── logo.png
+├── .gitignore
+├── README.md
 ├── package.json
-└── README.md
+└── package-lock.json
 
 # Sistema de Agendamento de Arena
 
