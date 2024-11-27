@@ -4,7 +4,7 @@
 Plataforma para agendamento de quadras de areia.
 
 ## Tecnologias
-- **Front-end:** React
+- **Front-end:** Javascript, React
 - **Back-end:** Node.js, Express.js
 - **Banco de Dados:** MongoDB
 
@@ -51,7 +51,7 @@ beach-arena-scheduler/
 ---
 
 ## Introdução
-Bem-vindo ao **Sistema de Agendamento de Arena**! Esta aplicação foi desenvolvida para permitir que você agende horários para diversas atividades esportivas,
+Bem-vindo ao **Sistema de Agendamento de Arenas**! Esta aplicação foi desenvolvida para permitir que você agende horários para diversas atividades esportivas,
 como beach volley e beach tennis, de maneira prática e intuitiva.
 
 ## Requisitos do Sistema
@@ -63,7 +63,7 @@ Para utilizar esta aplicação, você precisará dos seguintes requisitos:
 Para acessar o sistema de agendamento, siga estas instruções:
 1. Abra o navegador web de sua preferência.
 2. Acesse a aplicação pelo seguinte endereço:
-   - [https://arenaproteam.github.io/ArenaProScheduler/](https://arenaproteam.github.io/ArenaProScheduler/)
+   - [https://arenaproscheduler.vercel.app]
 
 ## Funcionalidades
 A aplicação oferece as seguintes funcionalidades principais:
@@ -71,7 +71,6 @@ A aplicação oferece as seguintes funcionalidades principais:
 ### Agendar um Horário
 1. Preencha o formulário com os detalhes da sua reserva:
    - **Nome**: Informe seu nome.
-   - **Esporte**: Escolha o esporte desejado (ex.: beach volley, beach tennis).
    - **Data e Horário**: Selecione a data e o horário desejado para o agendamento.
    - **Telefone**: Insira seu telefone celular de contato.
 2. Clique no botão **"RESERVAR"** para confirmar seu agendamento.
